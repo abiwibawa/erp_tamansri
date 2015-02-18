@@ -188,6 +188,7 @@ $(".edit").click(function(){
 $("#form_suratjalan").on('submit',function(e){
 	var vurl = $(this).attr("action");
 	var data2 = $(this).serialize();
+	alert(data2);
 	$.ajax({
 		type: "POST",
 		dataType: "json",

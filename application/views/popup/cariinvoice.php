@@ -20,7 +20,7 @@ function sendValue(idinv,idcust,noinv,nodok,total){
 					<tr>
 						<th width="10%">No Invoice</th>
 						<th width="10%">No Dokumen PO</th>
-						<th width="10%">Nama Customer</th>
+						<th width="10%">Total</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -30,7 +30,7 @@ function sendValue(idinv,idcust,noinv,nodok,total){
 					<tr>
 						<td><a style="text-decoration:none;" href="" onClick="sendValue(<?=$val?>)"><?=$row->no_invoice?></a></td>
 						<td><a style="text-decoration:none;" href="" onClick="sendValue(<?=$val?>)"><?=$row->no_dokumen?></a></td>
-						<td><a style="text-decoration:none;" href="" onClick="sendValue(<?=$val?>)"><?=$row->nama?></a></td>
+						<td><a style="text-decoration:none;" href="" onClick="sendValue(<?=$val?>)"><?=$row->total?></a></td>
 					</tr>
 					<?php $no++; } ?>
 				</tbody>

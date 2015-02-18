@@ -23,7 +23,7 @@ class penjualan_kwitansi_m extends CI_Model{
 	}
 	
 	function data_detail_temp($id=null){
-		$q = "SELECT
+		$q_bug = "SELECT
 					a.id_kwitansi_det,
 					a.id_kwitansi,
 					a.id_invoice,
@@ -39,6 +39,18 @@ class penjualan_kwitansi_m extends CI_Model{
 							id_kwitansi = '$id'
 					) a
 				LEFT JOIN orderinvoice b ON a.id_invoice = b.id_invoice";
+		$q = "SELECT 
+						k.id_kwitansi,
+						k.tanggal,
+						k.no_kwitansi,
+						k.id_ttd,
+						kd.id_kwitansi_det,
+						kd.id_invoice,
+						GetNoInvByID(kd.id_invoice) AS no_invoice,
+						FTotalHargaInvByCustomer (kd.id_invoice) AS subtotal
+					FROM
+					(SELECT * FROM orderkwitansi WHERE id_kwitansi='$id') k INNER JOIN
+					(SELECT * FROM orderkwitansi_det WHERE id_kwitansi='$id') kd ON k.id_kwitansi=kd.id_kwitansi";
 		$query = $this->db->query($q);
 		$no = 1;
 		$tabel = "";

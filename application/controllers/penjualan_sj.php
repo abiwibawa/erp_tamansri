@@ -233,7 +233,7 @@ Class penjualan_sj extends CI_Controller{
 			if(!empty($cek['id_surat_jalan'])){
 				//update temp_ordersuratjalan
 				$this->update_temphd();
-				$this->update->update2('temp_ordersuratjalan',$header,$where_up);
+				//$this->update->update2('temp_ordersuratjalan',$header,$where_up);
 				$this->move_totempdet($cek['id_surat_jalan']);
 			}else{
 				//$this->move_totemphd($id_surat_jalan);
