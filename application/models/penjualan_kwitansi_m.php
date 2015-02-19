@@ -83,7 +83,7 @@ class penjualan_kwitansi_m extends CI_Model{
 	
 	function get_header($id){
 		$hasil = array();
-		$q = "SELECT
+		$q_bak = "SELECT
 					a.no_kwitansi,
 					a.tanggal,
 					a.id_ttd,
@@ -94,6 +94,24 @@ class penjualan_kwitansi_m extends CI_Model{
 				(SELECT * FROM orderkwitansi WHERE id_kwitansi='$id')a LEFT JOIN
 				mastercustomer b ON a.id_customer=b.id_customer LEFT JOIN
 				mastertandatangan c ON a.id_ttd=c.id_ttd";
+		$q = "SELECT 
+						k.id_kwitansi,
+						k.tanggal,
+						k.no_kwitansi,
+						k.id_ttd,
+						kd.id_kwitansi_det,
+						kd.id_invoice,
+						GetNoInvByID(kd.id_invoice) AS no_invoice,
+						SUM(FTotalHargaInvByCustomer (kd.id_invoice)) AS total,
+						mc.nama AS nm_customer
+					FROM
+					(SELECT * FROM orderkwitansi WHERE id_kwitansi='$id') k INNER JOIN
+					(SELECT * FROM orderkwitansi_det WHERE id_kwitansi='$id') kd ON k.id_kwitansi=kd.id_kwitansi LEFT JOIN
+					orderinvoice inv ON kd.id_invoice=inv.id_invoice LEFT JOIN
+					ordersuratjalan os ON inv.id_surat_jalan=os.id_surat_jalan LEFT JOIN
+					`order` o ON os.id_order=o.id_order LEFT JOIN
+					mastercustomer mc ON o.id_customer=mc.id_customer;
+					GROUP BY k.id_kwitansi";
 		$query = $this->db->query($q);
 		foreach($query->result() as $row){
 			$hasil['no_kwitansi'] = $row->no_kwitansi;
@@ -109,11 +127,16 @@ class penjualan_kwitansi_m extends CI_Model{
 	
 	function data_detail($id){
 		$hasil = array();
-		$q = "SELECT
+		$q_bak = "SELECT
 					b.no_invoice
 				FROM
 				(SELECT * FROM orderkwitansi_det WHERE id_kwitansi='$id')a LEFT JOIN
 				orderinvoice b ON a.id_invoice=b.id_invoice";
+		$q = "SELECT 
+						GetNoInvByID(kd.id_invoice) AS no_invoice
+					FROM
+					(SELECT * FROM orderkwitansi WHERE id_kwitansi='$id') k INNER JOIN
+					(SELECT * FROM orderkwitansi_det WHERE id_kwitansi='$id') kd ON k.id_kwitansi=kd.id_kwitansi;";
 		$query = $this->db->query($q);
 		$a=1;
 		foreach($query->result() as $row){
