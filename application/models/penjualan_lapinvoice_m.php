@@ -48,4 +48,5 @@ Class Penjualan_lapinvoice_m extends CI_Model{
 		
 		return array('vtabel'=>$tabel);
 	}
+	
 }

@@ -8,6 +8,8 @@ Class penjualan_kwitansi extends CI_Controller{
     }
 	
 	function index(){
+		$sess_edit = array('id_kwitansi_sess'=>"");
+		$this->session->set_userdata($sess_edit);
 		$data['action_form'] = base_url('penjualan_kwitansi/savetemp');
 		$key=md5(rand(8888,999999));
 		$this->form_data->id_temp = $key;
@@ -81,6 +83,10 @@ Class penjualan_kwitansi extends CI_Controller{
 		echo json_encode($hasil);
 	}
 	
+	function aprove_edit(){
+		
+	}
+	
 	function hapus_item(){
 		$getPost = $this->input->post(null,true);
 		$id_det = $getPost[0];
@@ -95,11 +101,50 @@ Class penjualan_kwitansi extends CI_Controller{
 		echo json_encode($hasil);
 	}
 	
+	function vedit(){
+		$id = $this->session->userdata('id_kwitansi_sess');
+		$GetHeader = $this->penjualan_kwitansi_m->get_header($id);
+		$this->form_data->id_customer = $GetHeader['id_customer'];
+		$this->form_data->id_kwitansi = $GetHeader['id_kwitansi'];
+		$this->form_data->no_kwitansi = $GetHeader['no_kwitansi'];
+		$this->form_data->kode_customer = $GetHeader['kode_customer'];
+		$this->form_data->tanggal = $GetHeader['tgl_nonformat'];
+		$this->form_data->nama_customer = $GetHeader['nm_customer'];
+		$this->form_data->alamat_customer = $GetHeader['alamat'];
+		$this->form_data->telp_customer = $GetHeader['telpon'];
+		$this->form_data->kota_customer = $GetHeader['kota'];
+		$this->form_data->nama_ttd = $GetHeader['nama_ttd'];
+		$this->form_data->id_ttd = $GetHeader['id_ttd'];
+		$this->form_data->total = $GetHeader['total_nonformat'];
+		$this->form_data->terbilang = $GetHeader['terbilang'];
+		$this->hapus->HapusMaster2(array('id_kwitansi'=>$id),'temp_orderkwitansi'); 
+		$this->hapus->HapusMaster2(array('id_kwitansi'=>$id),'temp_orderkwitansi_det'); 
+		$this->move_totemphd($id);
+		$this->penjualan_kwitansi_m->move_to_tempdet($id);
+		
+		$data['action_form'] = base_url('penjualan_kwitansi/savetemp');
+		$data['page'] = 'penjualan/edit_penjualan_kwitansi';
+		$this->load->view('template/index',$data);
+	}
+	
+	function move_totemphd($id){
+		$tabel_hd = "orderkwitansi";
+		$select_hd = array("id_kwitansi","id_customer","tanggal","no_kwitansi","total","id_ttd");
+		$where_hd = array("id_kwitansi"=>$id);
+		$header = $this->getdatatabel->getbyid($tabel_hd,$select_hd,$where_hd);
+		$this->simpan->SimpanMaster('temp_orderkwitansi',$header);
+	}
+	
+	function get_item(){
+		$id_kwitansi = $this->input->post('id_kwitansi');
+		$hasil = $this->penjualan_kwitansi_m->data_detail_temp($id_kwitansi);
+		echo json_encode($hasil);
+	}
+	
 	function cetak_surat($id){
 		$data['header'] = $this->penjualan_kwitansi_m->get_header($id);
 		$data['detail'] = $this->penjualan_kwitansi_m->data_detail($id);
 		
-		//$this->load->view('page/penjualan/v_cetak_penjualan_kwitansi',$data);
-		print_r($data['detail']);
+		$this->load->view('page/penjualan/kwitansi',$data);
 	}
 }

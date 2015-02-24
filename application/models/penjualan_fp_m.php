@@ -126,12 +126,21 @@ Class Penjualan_fp_m extends CI_Model{
 	}
 	
 	function cetak($id_faktur_pajak){
-		$query = $this->db->query("select a.*,b.nama,alamat,npwp from 
+		$query = $this->db->query("select a.*,date_format(a.tanggal,'%d-%m-%Y')as tanggal_indo,d.nama,d.alamat,d.npwp from 
 									(select * from orderfakturpajak where id_faktur_pajak='$id_faktur_pajak')a
 									left join 
-									(select id_customer,nama,alamat,npwp from mastercustomer)b
+									(select id_order,id_surat_jalan from ordersuratjalan)b
 									on 
-									a.id_customer=b.id_customer");
+									a.id_surat_jalan=b.id_surat_jalan
+									left join 
+									(select id_order,id_customer from `order`)c
+									on 
+									b.id_order=c.id_order
+									left join 
+									(select id_customer,nama,alamat,npwp from mastercustomer)d
+									on 
+									c.id_customer=d.id_customer
+									");
 		return $query->row();
 	}	
 	

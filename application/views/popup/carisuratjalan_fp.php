@@ -20,6 +20,21 @@ function sendValue(id_invoice,id_order,id_customer,id_surat_jalan,no_surat_jalan
 	window.opener.document.getElementById('npwp').value=npwp;
 	window.close();
 }
+$(function() {
+	$('#form_cari').on("submit",function(e) {
+		e.preventDefault();
+		$.ajax({
+				type: "POST",
+				dataType: "html",
+				url : "<?= base_url('penjualan_fp/carisuratjalanreload') ?>",
+				data : $(this).serializeArray(),
+				success: function(response){
+					$(".isi_table").html(response);
+				}
+		});
+		
+	});
+});
 </script>
 <div class="row">
 	<div class="col-md-12">
@@ -27,7 +42,7 @@ function sendValue(id_invoice,id_order,id_customer,id_surat_jalan,no_surat_jalan
 			<div class="header">
 				<h4>Cari Customer</h4>
 			</div>
-			<form action="<?=base_url('penjualan_fp/carisuratjalan')?>" method="post">
+			<form id="form_cari" action="<?=base_url('penjualan_fp/carisuratjalan')?>" method="post">
 			<div class="content controls">
 				<div class="form-row">
 					<div class="col-md-4"><?=form_input('key',$this->form_data->key,'class="form-control" placeholder="Nomor Surat Jalan"')?></div>
@@ -37,50 +52,8 @@ function sendValue(id_invoice,id_order,id_customer,id_surat_jalan,no_surat_jalan
 				</div>
 			</div>
 			</form>
-			<div class="content">
-				<table cellpadding="0" cellspacing="0" width="100%" class="table table-bordered table-striped sortable">
-				<thead>
-					<tr>
-						<th width="2%">No</th>
-						<th width="25%">Nama Customer</th>
-						<th width="20%">Alamat</th>
-						<th width="20%">NPWP</th>
-						<th width="5%"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php 
-					$no=1; 
-					foreach($list as $row){ 
-						$datas=array("id_invoice"=>$row->id_invoice,
-									"id_order"=>$row->id_order,
-									"id_customer"=>$row->id_customer,
-									"id_surat_jalan"=>$row->id_surat_jalan,
-									"no_surat_jalan"=>$row->no_surat_jalan,
-									"nama"=>$row->nama,
-									"alamat"=>$row->alamat,
-									"npwp"=>$row->npwp);
-						$data='';
-						$n=1;
-						foreach($datas as $key=>$val){
-							if(count($datas)==$n)
-								$data=$data." '".$val."'";
-							else
-								$data=$data." '".$val."',";
-							$n++;
-						}
-						?>
-						<tr>
-							<td><?=$no?></td>
-							<td><a style="text-decoration:none;" onClick="sendValue(<?=$data?>)" ><?=$row->nama?></a></td>
-							<td><a style="text-decoration:none;" onClick="sendValue(<?=$data?>)" ><?=$row->alamat?></a></td>
-							<td><a style="text-decoration:none;" onClick="sendValue(<?=$data?>)" ><?=$row->npwp?></a></td>
-							<td><a style="text-decoration:none;" onClick="sendValue(<?=$data?>)" >select</a></td>
-						</tr>
-						<?php $no++; 
-					} ?>
-				</tbody>
-				</table>
+			<div class="content isi_table">
+				<?php $this->load->view('popup/carisuratjalan_fptable')?>
 			</div>
 	</div>
 </div>

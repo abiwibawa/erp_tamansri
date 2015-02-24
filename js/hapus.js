@@ -1,16 +1,18 @@
 function hapus_item(url,arrID){
+	//alert("hapus");
 	var mySplit = arrID.split('.');
 	var data = {};
 	for(var i=0;i<mySplit.length;i++){
         data[i] = mySplit[i];
     }
+	//console.log(data);
 	$.ajax({
 		type: "POST",
 		dataType: "json",
 		url : url,
 		data: data,
 		success: function(response){
-			//alert(response.total);
+			console.log(response);
 			$("#subtotal").val(response.subtotal);
 			$("#total_harga").val(response.subtotal);
 			$("#total").val(response.total);

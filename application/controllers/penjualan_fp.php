@@ -39,6 +39,14 @@ Class penjualan_fp extends CI_Controller{
 		$this->load->view('popup/popup',$data);		
 	}	
 	
+	function carisuratjalanreload(){
+		$key = $this->input->post('key');
+		$this->form_data->key=$key;
+		$this->form_data->filter='';
+		$data['list'] = $this->penjualan_fp_m->carisuratjalan($key);
+		echo $this->load->view('popup/carisuratjalan_fptable',$data);		
+	}	
+	
 	function detailitem(){
 		$id_surat_jalan = $this->input->post('id_surat_jalan');
 		$data = $this->penjualan_fp_m->detailitem($id_surat_jalan);

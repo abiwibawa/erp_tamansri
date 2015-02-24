@@ -54,7 +54,7 @@ Class Penjualan_invoice_m extends CI_Model{
 									ON a.id_barang = b.id_barang
 									LEFT JOIN 
 									(SELECT id_order_det,id_barang,harga FROM order_det) c 
-									ON a.id_order_det = c.id_order_det
+									ON a.id_order_det = c.id_order_det and a.id_barang=c.id_barang
 									");
 		$no=1;
 		$tabel='';
@@ -91,7 +91,7 @@ Class Penjualan_invoice_m extends CI_Model{
 									ON a.id_barang = b.id_barang
 									LEFT JOIN 
 									(SELECT id_order_det,id_barang,harga FROM order_det) c 
-									ON a.id_order_det = c.id_order_det
+									ON a.id_order_det = c.id_order_det and a.id_barang=c.id_barang
 									");
 		
 		return $query->result();
@@ -155,8 +155,8 @@ Class Penjualan_invoice_m extends CI_Model{
 											WHERE
 												id_invoice = '$id_invoice'
 										) a
-									LEFT JOIN (SELECT id_order,no_dokumen,date_format(tanggal,'%d-%m-%Y')as tanggal_order,id_customer FROM `order`) c ON a.id_order = c.id_order
-									LEFT JOIN (SELECT * FROM mastercustomer) b ON c.id_customer = b.id_customer
+									LEFT JOIN (SELECT * FROM mastercustomer) b ON a.id_customer = b.id_customer
+									LEFT JOIN (SELECT id_order,no_dokumen,date_format(tanggal,'%d-%m-%Y')as tanggal_order FROM `order`) c ON a.id_order = c.id_order
 									LEFT JOIN (select * from mastertandatangan)d on a.id_ttd=d.id_ttd
 									");
 		return $query->row();
@@ -171,5 +171,44 @@ Class Penjualan_invoice_m extends CI_Model{
 			return '0'.$no;
 		else 
 			return $no;
+	}
+	
+	
+	function RubahTanggal($tgl){
+		$x=explode("-",$tgl);
+		$tanggal=$x[0];
+		$tahun=$x[2];
+		if($x[1]==1)
+			$bulan=" Januari ";
+		else if($x[1]==2)
+			$bulan=" Februari ";
+		else if($x[1]==3)
+			$bulan=" Maret ";
+		else if($x[1]==4)
+			$bulan=" April ";
+		else if($x[1]==5)
+			$bulan=" Mei ";
+		else if($x[1]==6)
+			$bulan=" Juni ";
+		else if($x[1]==7)
+			$bulan=" Juli ";
+		else if($x[1]==8)
+			$bulan=" Agustus ";
+		else if($x[1]==9)
+			$bulan=" September ";
+		else if($x[1]==10)
+			$bulan=" Oktober ";
+		else if($x[1]==11)
+			$bulan=" November ";
+		else if($x[1]==11)
+			$bulan=" Desember ";
+		else
+			$bulan='?';
+		
+		return $tanggal.$bulan.$tahun;
+	}
+	
+	function Rupiah($rupiah){
+		return number_format($rupiah, 2 , ',' , '.' ); 
 	}
 }

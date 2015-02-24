@@ -249,7 +249,7 @@
 			<div class="nama-alamat-kota">
 				<table class="invisibletable">
 					<tr>
-						<td>Tanggal</td><td>:</td><td> <?=$data->tanggal_invoice?></td>
+						<td>Tanggal</td><td>:</td><td> <?=$this->penjualan_invoice_m->RubahTanggal($data->tanggal_invoice)?></td>
 					</tr>
 					<tr>
 						<td>No. Order</td><td>:</td><td> <?=$data->no_dokumen?></td>
@@ -276,8 +276,8 @@
 						echo "<td>".$row->nama_barang."</td>";
 						echo "<td>".$row->satuan."</td>";
 						echo "<td>".$row->kuantitas."</td>";
-						echo "<td>".$row->harga."</td>";
-						echo "<td>".$row->kuantitas*$row->harga."</td>";
+						echo "<td>".$this->penjualan_invoice_m->Rupiah($row->harga)."</td>";
+						echo "<td>".$this->penjualan_invoice_m->Rupiah($row->kuantitas*$row->harga)."</td>";
 					echo "</tr>";
 				$no++;
 				} 
@@ -289,17 +289,17 @@
 				<tr>
 					<td colspan="3" style="border:none"></td>
 					<td colspan="2" style="border:none">Sub Total</td>
-					<td><?=$data->subtotal?></td>
+					<td><?=$this->penjualan_invoice_m->Rupiah($data->subtotal)?></td>
 				</tr>
 				<tr>
 					<td colspan="3" style="border:none"></td>
 					<td colspan="2" style="border:none">Pajak PPN 10%</td>
-					<td><?=$data->ppn?></td>
+					<td><?=$this->penjualan_invoice_m->Rupiah($data->ppn)?></td>
 				</tr>
 				<tr>
 					<td colspan="3" style="border:none"></td>
 					<td colspan="2" style="border:none">Total</td>
-					<td><?=$data->total?></td>
+					<td><?=$this->penjualan_invoice_m->Rupiah($data->total)?></td>
 				</tr>
 				<tr>
 					<td colspan="6" style="border:none"><br><br></td>

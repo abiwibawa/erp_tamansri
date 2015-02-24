@@ -44,6 +44,14 @@ Class penjualan_invoice extends CI_Controller{
 		$this->load->view('popup/popup',$data);		
 	}	
 	
+	function carisuratjalanreload(){
+		$key = $this->input->post('key');
+		$this->form_data->key=$key;
+		$this->form_data->filter='';
+		$data['list'] = $this->penjualan_invoice_m->carisuratjalan($key);
+		echo $this->load->view('popup/carisuratjalantable',$data);		
+	}	
+	
 	function caritandatangansurat(){
 		$key = $this->input->post('key');
 		$this->form_data->key=$key;

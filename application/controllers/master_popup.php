@@ -90,4 +90,12 @@ class master_popup extends CI_Controller{
 		$data['page'] = 'popup/cariinvoice';
 		$this->load->view('popup/popup',$data);
 	}
+	
+	function cariinv_edit(){
+		$id_customer = $this->input->get("id_customer");
+		$id_kwitansi = $this->input->get("id_kwitansi");
+		$data['list'] = $this->master_popup_m->cariinv_edit($id_kwitansi,$id_customer);
+		$data['page'] = 'popup/cariinvoice';
+		$this->load->view('popup/popup',$data);
+	}
 }

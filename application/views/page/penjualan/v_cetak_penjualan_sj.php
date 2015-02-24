@@ -208,7 +208,7 @@
 			<div class="kop-surat">
 				<h1>PT. Taman Sriwedari</h1>
 				<h5>OFFICE : JL. SERSAN KKO USMAN NO. 27.DS. DANDANGAN</h5>
-				<h5>KEC. KOTA, KOTA KEDIRI - JAWA TIMUR</h5>
+				<h5>KEC. GAMPENG, KAB KEDIRI - JAWA TIMUR</h5>
 				<h5>PHONE  : (0354) 686358  FAX. (0354) 690690</h5>
 				<h5>EMAIL  : marketing@tamansriwedari.com</h5>
 			</div>

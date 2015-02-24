@@ -133,8 +133,39 @@ class master_popup_m extends CI_Model{
 				FROM
 				(SELECT * FROM `order` WHERE id_customer='$id') o LEFT JOIN
 				ordersuratjalan sj ON o.id_order=sj.id_order LEFT JOIN
-				(SELECT * FROM orderinvoice WHERE status_kwitansi='0') inv ON sj.id_surat_jalan=inv.id_surat_jalan
+				(SELECT * FROM orderinvoice WHERE id_invoice NOT IN (SELECT id_invoice FROM orderkwitansi_det)) inv ON sj.id_surat_jalan=inv.id_surat_jalan
 				WHERE inv.id_invoice IS NOT NULL";
+		$query = $this->db->query($q);
+		return $query->result();
+	}
+	
+	function cariinv_edit($id_kwitansi,$id_customer){
+		$q = "SELECT
+					a.id_kwitansi,
+					b.id_invoice,
+					b.id_order,
+					b.id_customer,
+					b.id_surat_jalan,
+					b.status_kwitansi,
+					b.no_invoice,
+					b.no_dokumen,
+					b.total
+				FROM
+				(SELECT * FROM orderkwitansi_det WHERE id_kwitansi='$id_kwitansi')a RIGHT JOIN
+				(SELECT
+						o.id_order,
+						o.id_customer,
+						sj.id_surat_jalan,
+						inv.id_invoice,
+						inv.status_kwitansi,
+						inv.no_invoice,
+						FNoOrderByCustomer(inv.id_invoice) AS no_dokumen,
+						FTotalHargaInvByCustomer(inv.id_invoice) AS total
+					FROM
+					(SELECT * FROM `order` WHERE id_customer='$id_customer') o LEFT JOIN
+					ordersuratjalan sj ON o.id_order=sj.id_order LEFT JOIN
+					(SELECT * FROM orderinvoice) inv ON sj.id_surat_jalan=inv.id_surat_jalan
+					WHERE inv.id_invoice IS NOT NULL)b ON a.id_invoice=b.id_invoice";
 		$query = $this->db->query($q);
 		return $query->result();
 	}

@@ -35,7 +35,7 @@ Class penjualan_lapsj extends CI_Controller{
 				$set_sess = array('key_sess'=>$this->input->post('key'),'filter_sess'=>$filter);
 				$this->session->set_userdata($set_sess);
 			}else{
-				$array_items = array('key_sess'=>'');;
+				$array_items = array('key_sess'=>'');
 				$this->session->unset_userdata($array_items);
 				
 				$set_sess = array('tanggal1_sess'=>$this->input->post('tanggal1'),'tanggal2_sess'=>$this->input->post('tanggal2'),'filter_sess'=>$filter);
