@@ -138,7 +138,6 @@ $(".simpan_kw").click(function(){
 		data: data2,
 		success: function(response){
 			window.location.replace(response.redir,'_blank');
-			//alert(response);
 		}
 	});
 });
@@ -250,6 +249,7 @@ $("#form_kw").on('submit',function(e){
 				//alert(response);
 				$("#total").val(response.total);
 				$("#id_kwitansi").val(response.id_kwitansi);
+				$("#terbilang").val(response.terbilang);
 				
 				$('tbody').html('');
 				$('tbody').append(response.vtabel);

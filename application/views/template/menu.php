@@ -20,6 +20,7 @@
 							<li><a href="<?=base_url('master_supplier')?>">Master Supplier</a></li>
 							<li><a href="<?=base_url('master_satpam')?>">Master Satpam</a></li>
 							<li><a href="<?=base_url('master_supir')?>">Master Supir</a></li>
+							<li><a href="<?=base_url('master_ttd')?>">Master Tanda Tangan</a></li>
 							<li><a href="<?=base_url('master_pengirim')?>">Master Pengirim</a></li>
 							<li><a href="<?=base_url('master_nofaktur')?>">List No.Faktur</a></li>
 						</ul>                                

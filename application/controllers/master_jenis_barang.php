@@ -3,6 +3,7 @@
 class master_jenis_barang extends CI_Controller {
 	function __construct() {
 		parent::__construct();
+		$this->form_data = new StdClass;
     }
 	
 	public function index()

@@ -55,13 +55,16 @@ class penjualan_kwitansi_m extends CI_Model{
 		$no = 1;
 		$tabel = "";
 		$total = 0;
+		$terbilang = "";
 		foreach($query->result() as $row){
 			$total = $total + $row->subtotal;
 			$tabel .="<tr><td>".$no."</td><td>".$row->no_invoice."</td><td>".$row->subtotal."</td><td><button type=\"button\" direction=".base_url('penjualan_kwitansi/hapus_item')." class=\"hapus_item btn btn-danger\" id=".$row->id_kwitansi_det.".".$row->id_kwitansi."><i class=\"icon-trash\"></i> &nbsp;hapus</button></td></tr>";
 			
 			$no++;
 		}
-		return array("vtabel"=>$tabel,"total"=>$total);
+		if($total>0)
+			$terbilang = $this->terbilang_lib->Terbilang($total)." Rupiah";
+		return array("vtabel"=>$tabel,"total"=>$total,"terbilang"=>$terbilang);
 	}
 	
 	function simpan_detail($id){

@@ -53,16 +53,8 @@
 				<div class="header">
 					<h2>Kwitansi Penjualan</h2>
 					<div class="side pull-right">
-						<button class="simpan_kw btn btn-primary" data-url="<?=base_url('penjualan_kwitansi/aprove_edit')?>">
+						<button class="simpan_kw btn btn-primary" data-url="<?=base_url('penjualan_kwitansi/aprove_order')?>">
 							<i class="icon-save"></i>&nbsp;&nbsp;simpan
-						</button>
-						
-						<button class="clearform btn btn-primary">
-							<i class="icon-print"></i>&nbsp;&nbsp;print
-						</button>
-						
-						<button class="clearform btn btn-primary">
-							<i class="icon-refresh"></i>&nbsp;&nbsp;clear
 						</button>
 					</div>
 				</div>
@@ -131,9 +123,9 @@
 				<div class="form-row">
 					<div class="col-md-12"><?=form_input('total',$this->form_data->total,'class="form-control" id="total" readonly')?></div>
 				</div>
-				<div class="form-row">
-					<div class="col-md-12"><textarea readonly><?=$this->form_data->terbilang?></textarea></div>
-				</div>
+				<!--<div class="form-row">
+					<div class="col-md-12"><textarea readonly id="terbilang"><?=$this->form_data->terbilang?></textarea></div>
+				</div>-->
 			</div>
 		</div>
 	</div>

@@ -67,6 +67,16 @@ Class penjualan_kwitansi extends CI_Controller{
 	}
 	
 	function aprove_order(){
+		$id_kwitansi = $this->input->post('id_kwitansi');
+		$cek = $this->getdatatabel->getbyid('orderkwitansi',array("id_kwitansi"),array("id_kwitansi"=>$id_kwitansi));
+		if($cek['id_kwitansi']!=""){
+			$this->edit();
+		}else{
+			$this->simpan();
+		}
+	}
+	
+	function simpan(){
 		$getPost = $this->input->post(null,true);
 		$selectHD = array("id_kwitansi","id_customer","tanggal","id_ttd");
 		$whereHD['id_kwitansi'] = $getPost['id_kwitansi'];
@@ -79,12 +89,41 @@ Class penjualan_kwitansi extends CI_Controller{
 		$this->update->update2('orderkwitansi',$data,array('id_kwitansi'=>$dataHD['id_kwitansi']));
 		$this->hapus->HapusMaster2(array('id_kwitansi'=>$dataHD['id_kwitansi']),'temp_orderkwitansi');
 		$this->penjualan_kwitansi_m->simpan_detail($dataHD['id_kwitansi']);
-		$hasil = array('redir'=>base_url('penjualan_kwitansi/cetak_surat/'.$dataHD['id_kwitansi']));
+		$set = array("filter"=>"f1","key_sess"=>$data['no_kwitansi']);
+		$this->session->set_userdata($set);
+		$hasil = array('redir'=>base_url('penjualan_lapkwitansi/filter'));
+		//$hasil = array('redir'=>base_url('penjualan_kwitansi/cetak_surat/'.$dataHD['id_kwitansi']));
 		echo json_encode($hasil);
 	}
 	
-	function aprove_edit(){
-		
+	function edit(){
+		$getPost = $this->input->post(null,true);
+		$this->update_temphd();
+		$tabel = "temp_orderkwitansi";
+		$select = array("id_kwitansi","id_customer","tanggal","no_kwitansi","total","id_ttd");
+		$where = array("id_kwitansi"=>$this->input->post('id_kwitansi'));
+		$header = $this->getdatatabel->getbyid($tabel,$select,$where);
+		$where_ins = array("id_kwitansi"=>$this->input->post('id_kwitansi'));
+		$set = elements(array('tanggal','id_customer','id_ttd'),$header);
+		$this->update->update2('orderkwitansi',$set,$where_ins);
+		$this->hapus->HapusMaster2(array('id_kwitansi'=>$this->input->post('id_kwitansi')),'temp_orderkwitansi');
+		$this->hapus->HapusMaster2(array('id_kwitansi'=>$this->input->post('id_kwitansi')),'orderkwitansi_det');
+		$this->penjualan_kwitansi_m->simpan_detail($this->input->post('id_kwitansi'));
+		$set = array("filter"=>"f1","key_sess"=>$header['no_kwitansi']);
+		$this->session->set_userdata($set);
+		$hasil = array('redir'=>base_url('penjualan_lapkwitansi/filter'));
+		//$hasil = array('redir'=>base_url('penjualan_kwitansi/cetak_surat/'.$this->input->post('id_kwitansi')));
+		echo json_encode($hasil);
+	}
+	
+	function update_temphd(){
+		//update temp_ordersuratjalan
+		$header = array(
+								"tanggal"=>date('Y-m-d',strtotime($this->input->post('tanggal'))),
+								"id_ttd" =>$this->input->post('id_ttd')
+								);
+		$where_up = array("id_kwitansi"=>$this->input->post('id_kwitansi'));
+		$this->update->update2('temp_orderkwitansi',$header,$where_up);
 	}
 	
 	function hapus_item(){
