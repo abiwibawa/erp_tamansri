@@ -1,7 +1,42 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class master_popup_m extends CI_Model{
-
+	function carikwitansi($key){
+		$query = $this->db->query("SELECT 
+						k.id_kwitansi,
+						k.no_kwitansi,
+						SUM(FTotalHargaInvByCustomer (kd.id_invoice)) AS total
+					FROM
+					(SELECT * FROM orderkwitansi WHERE id_kwitansi NOT IN(SELECT id_kwitansi FROM bayarpiutang_det)) k INNER JOIN
+					(SELECT * FROM orderkwitansi_det) kd ON k.id_kwitansi=kd.id_kwitansi LEFT JOIN
+					orderinvoice inv ON kd.id_invoice=inv.id_invoice LEFT JOIN
+					ordersuratjalan os ON inv.id_surat_jalan=os.id_surat_jalan LEFT JOIN
+					(SELECT * FROM mastercustomer WHERE id_customer=$key) mc ON mc.id_customer=k.id_customer
+					WHERE mc.nama IS NOT NULL
+					GROUP BY k.id_kwitansi");
+		return $query->result();
+	}
+	function caricustomerpembayaran($key,$filter){
+		if($filter == "kode"){
+			$where = "WHERE upper(kode_customer) like upper('%$key%')";
+		}elseif($filter == "nama"){
+			$where = "WHERE upper(nama) like upper('%$key%')";
+		}else{
+			$where = "";
+		}
+		
+		$query = $this->db->query("SELECT
+													od.id_kwitansi,
+													od.id_customer,
+													mc.nama,
+													mc.kode_customer,
+													mc.inisial
+												FROM
+												(SELECT * FROM orderkwitansi WHERE id_kwitansi NOT IN(SELECT id_kwitansi FROM bayarpiutang_det) GROUP BY id_customer) od LEFT JOIN
+												(SELECT * FROM mastercustomer $where) mc ON od.id_customer=mc.id_customer
+												WHERE mc.nama IS NOT NULL");
+		return $query->result();
+	}
 	function caricustomer($key,$filter){
 		if($filter == "kode"){
 			$where = "WHERE upper(kode_customer) like upper('%$key%')";

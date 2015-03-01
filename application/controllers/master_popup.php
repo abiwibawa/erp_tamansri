@@ -6,6 +6,23 @@ class master_popup extends CI_Controller{
 		parent::__construct();
 		$this->load->model('master_popup_m');
     }
+	
+	function carikwitansi(){
+		$key = $this->input->get('idcustomer');
+		$data['list'] = $this->master_popup_m->carikwitansi($key);
+		$data['page'] = 'popup/carikwitansi';
+		$this->load->view('popup/popup',$data);
+	}
+	
+	function caricustomerpembayaran(){
+		$key = $this->input->post('key');
+		$filter = $this->input->post('filter');
+		$this->form_data->key=$key;
+		$this->form_data->filter = $filter;
+		$data['list'] = $this->master_popup_m->caricustomerpembayaran($key,$filter);
+		$data['page'] = 'popup/caricustomerpembayaran';
+		$this->load->view('popup/popup',$data);
+	}
 
 	function caricustomer(){
 		$key = $this->input->post('key');

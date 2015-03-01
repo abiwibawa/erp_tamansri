@@ -117,6 +117,46 @@ Class Penjualan_fp_m extends CI_Model{
 		
 	}
 	
+	function updatefakturpajak(){
+		
+		//update nofaktur menjadi 0 untuk id_no_faktur lama
+		$this->update->update2('nofaktur',array('status'=>0),array('id_no_faktur'=>$this->input->post('id_no_faktur_lama')));
+		//update nofaktur menjadi 1
+		$this->update->update2('nofaktur',array('status'=>1),array('id_no_faktur'=>$this->input->post('id_no_faktur')));
+		
+		
+		//update ordersuratjalan menjadi 0 untuk id_surat_jalan lama
+		$this->update->update2('ordersuratjalan',array('status_faktur'=>0),array('id_surat_jalan'=>$this->input->post('id_surat_jalan_lama')));
+		//update ordersuratjalan menjadi 1
+		$this->update->update2('ordersuratjalan',array('status_faktur'=>1),array('id_surat_jalan'=>$this->input->post('id_surat_jalan')));
+		
+		$data=array("kode_transaksi"=>$this->input->post('kode_transaksi'),
+					"id_no_faktur"=>$this->input->post('id_no_faktur'),
+					"no_faktur"=>$this->input->post('no_faktur'),
+					"tanggal"=>date('Y-m-d',strtotime($this->input->post('tanggal'))),
+					"id_surat_jalan"=>$this->input->post('id_surat_jalan'),
+					"id_order"=>$this->input->post('id_order'),
+					"id_invoice"=>$this->input->post('id_invoice'),
+					"id_customer"=>$this->input->post('id_customer'),
+					"subtotal"=>$this->input->post('subtotal'),
+					"potongan"=>$this->input->post('potongan'),
+					"uang_muka"=>$this->input->post('uang_muka'),
+					"dasar_pajak"=>$this->input->post('dasar_pajak'),
+					"ppn"=>$this->input->post('ppn'),
+					"id_ttd"=>$this->input->post('id_ttd')
+					);
+					
+		$id_faktur_pajak=$this->input->post('id_faktur_pajak');			
+		$this->update->Master($data,'orderfakturpajak',array('id_faktur_pajak'=>$id_faktur_pajak));
+		
+		
+		//$query=$this->db->query("select id_faktur_pajak from orderfakturpajak where id_no_faktur='".$data['id_no_faktur']."'");
+		//$id_faktur_pajak=$query->row('id_faktur_pajak');
+		
+		return $id_faktur_pajak;
+		
+	}
+	
 	function ceknofaktur($id_no_faktur){
 		$query=$this->db->query("select id_faktur_pajak from orderfakturpajak where id_no_faktur='$id_no_faktur'");
 		if($query->num_rows()==0)
@@ -165,6 +205,13 @@ Class Penjualan_fp_m extends CI_Model{
 									ON a.id_order_det = c.id_order_det and a.id_barang=c.id_barang
 									");
 		return $query->result();
+	}
+	
+	
+		
+	function tampileditfp($id_faktur_pajak=null){
+		$query=$this->db->query("SELECT *,date_format(tanggal,'%d/%m/%Y')as tanggal_indo from orderfakturpajak where id_faktur_pajak='$id_faktur_pajak'");
+		return $query->row();		
 	}
 
 }

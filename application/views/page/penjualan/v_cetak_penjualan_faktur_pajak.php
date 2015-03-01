@@ -323,30 +323,30 @@
 						}
 						echo "</td><td>";
 						foreach($detailfakturpajak as $row){
-							echo $this->penjualan_lapfakturpajak_m->Rupiah($row->kuantitas*$row->harga)."<br>";
+							echo $this->gp_m->Rupiah($row->kuantitas*$row->harga)."<br>";
 						};
 						echo "</td></tr>";
 				
 				?>
 					<tr class="bawahnya-fill">
 						<td colspan="2">Jumlah Harga Jual / Pengganti / Uang Muka / Termijn )*</td>
-						<td><?=$this->penjualan_lapfakturpajak_m->Rupiah($data->subtotal)?></td>
+						<td><?=$this->gp_m->Rupiah($data->subtotal)?></td>
 					</tr>
 					<tr class="bawahnya-fill">
 						<td colspan="2">Dikurangi Potongan Harga</td>
-						<td><?=$this->penjualan_lapfakturpajak_m->Rupiah($data->potongan)?></td>
+						<td><?=$this->gp_m->Rupiah($data->potongan)?></td>
 					</tr>
 					<tr class="bawahnya-fill">
 						<td colspan="2">Dikurangi Uang Muka Yang Diterima</td>
-						<td><?=$this->penjualan_lapfakturpajak_m->Rupiah($data->uang_muka)?></td>
+						<td><?=$this->gp_m->Rupiah($data->uang_muka)?></td>
 					</tr>
 					<tr class="bawahnya-fill">
 						<td colspan="2">Dasar Pengenaan Pajak</td>
-						<td><?=$this->penjualan_lapfakturpajak_m->Rupiah($data->dasar_pajak)?></td>
+						<td><?=$this->gp_m->Rupiah($data->dasar_pajak)?></td>
 					</tr>
 					<tr class="bawahnya-fill">
 						<td colspan="2">PPN = 10% x Dasar Pengenaan Pajak</td>
-						<td><?=$this->penjualan_lapfakturpajak_m->Rupiah($data->dasar_pajak/10) ?></td>
+						<td><?=$this->gp_m->Rupiah($data->dasar_pajak/10) ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -371,7 +371,7 @@
 				</tr>
 			</table>
 			<div class="tanda-tangan">
-				<p>Kediri, <?= $this->penjualan_lapfakturpajak_m->RubahTanggal($data->tanggal_indo)?></p><p>Nama : Drs. Suwanto</p>
+				<p>Kediri, <?= $this->gp_m->RubahTanggal($data->tanggal_indo)?></p><p>Nama : Drs. Suwanto</p>
 			</div>
 		</div>
 		<p class="tulisan-paling-bawah">*) Coret yang tidak perlu</p>

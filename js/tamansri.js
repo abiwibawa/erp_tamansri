@@ -1,23 +1,62 @@
+$(".tree_link").click(function(){
+	$(".tree_link").removeClass("activeNodeLink");
+	$(this).addClass("activeNodeLink");
+	var id=$(this).attr("id");
+	var mySplit = id.split('-');
+	$("#id").val(mySplit[0]);
+	console.log(mySplit);
+	if(mySplit.length>2){
+		$("#kode").val(mySplit[1].replace(" ", ""));
+		$("#uraian").val(mySplit[2].replace(" ", ""));
+	}else{
+		$("#kode").val("");
+		$("#uraian").val(mySplit[1].replace(" ", ""));
+	}
+	
+	$(".addmaster").attr("data-id",mySplit[0]);
+	$(".editmaster").attr("data-id",mySplit[0]);
+});
 $(".addmaster").click(function(){
 	var vurl=$(this).attr("data-direction");
 	var title=$(this).attr("data-original-title");
 	var action=$(this).attr("data-href");
 	var width=$(this).attr("data-wd");
-	
-	$("#modal_default_2 .modal-dialog").css('width',width);
-	$.ajax({
-		url: vurl,
-		dataType: "html",
-		beforeSend: function(){
-			$("#modal_default_2 .modal-title").empty();
-			$("#modal_default_2 .modal-body").empty();
-		},
-		success: function(response) {
-			$("#modal_default_2 .modal-title").html(title);
-			$("#modal_default_2 .modal-body").html(response);
-			$("#form_modal ").attr('action',action);
-		}
-	});
+	var dataid=$(this).attr("data-id");
+	if(dataid==""){
+		$("#modal_default_2 .modal-dialog").css('width',width);
+		$.ajax({
+			url: vurl,
+			dataType: "html",
+			beforeSend: function(){
+				$("#modal_default_2 .modal-title").empty();
+				$("#modal_default_2 .modal-body").empty();
+			},
+			success: function(response) {
+				$("#modal_default_2 .modal-title").html(title);
+				$("#modal_default_2 .modal-body").html(response);
+				$("#form_modal ").attr('action',action);
+			}
+		});
+	}else{
+		$("#modal_default_2 .modal-dialog").css('width',width);
+		var parsing = {id:dataid};
+		console.log(parsing);
+		$.ajax({
+			type: "post",
+			url: vurl,
+			dataType: "html",
+			data:parsing,
+			beforeSend: function(){
+				$("#modal_default_2 .modal-title").empty();
+				$("#modal_default_2 .modal-body").empty();
+			},
+			success: function(response) {
+				$("#modal_default_2 .modal-title").html(title);
+				$("#modal_default_2 .modal-body").html(response);
+				$("#form_modal ").attr('action',action);
+			}
+		});
+	}
 });
 
 $(".editmaster").click(function(){
@@ -258,6 +297,46 @@ $("#form_kw").on('submit',function(e){
 				$("#id_invoice").val('');
 				$("#no_order").val('');
 				$("#subtotal").val('');
+			}
+			$(".hapus_item").click(function(){
+				var durl = $(this).attr("direction");
+				var id = $(this).attr("id");
+				
+				hapus_item(durl,id);
+			});
+		}
+	});
+	return false;
+});
+
+$("#form_pembayaran").on('submit',function(e){
+	var vurl = $(this).attr("action");
+	var data2 = $(this).serialize();
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		url : vurl,
+		data: data2,
+		beforeSend: function(){
+			//alert(data2);
+		},
+		success: function(response){
+			//alert(response);
+			if(response.status=="false"){
+				$("#modal_default_10").modal("show");
+				$("#modal_default_10 .modal-header .modal-title").html("Peringatan");
+				$("#modal_default_10 .modal-body").html(response.msg);
+				$("#modal_default_10 .modalcloseok").attr("data-direction",response.redir);
+			}else{
+				//alert(response);
+				$("#total").val(response.total);
+				$("#id_piutang").val(response.id_piutang);
+				$("#terbilang").val(response.terbilang);
+				$("#no_kwitansi").val('');
+				$("#id_kwitansi").val('');
+				$("#subtotal").val('');
+				$('tbody').html('');
+				$('tbody').append(response.vtabel);
 			}
 			$(".hapus_item").click(function(){
 				var durl = $(this).attr("direction");
