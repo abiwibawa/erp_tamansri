@@ -78,14 +78,31 @@
 					<li class="dropdown active">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-globe"></span> Pembelian</a>
 						<ul class="dropdown-menu">
-							<li><a href="component_blocks.html">Pesan Barang</a></li>
-							<li><a href="component_buttons.html">Surat Jalan</a></li>
-							<li><a href="component_modals.html">Invoice</a></li>
-							<li><a href="component_progress.html">Reture</a></li>
-							<li><a href="component_tabs.html">Faktur Pajak</a></li>
-							<li><a href="component_lists.html">Pembayaran</a></li>
-							<li><a href="component_messages.html">Stok Barang</a></li>
-							<li><a href="component_messages.html">Laporan Penjualan</a></li>
+							<li>
+								<a href="#">Pemesanan<i class="icon-angle-right pull-right"></i></a>
+								<ul class="dropdown-submenu">
+									<li><a href="<?=base_url('pembelian_pemesanan')?>">Input Pemesanan</a></li>
+									<li><a href="<?=base_url('pembelian_lappemesanan')?>">Laporan Pemesanan</a></li>
+								</ul>
+							</li>
+							<li>
+								<a href="#">Penerimaan<i class="icon-angle-right pull-right"></i></a>
+								<ul class="dropdown-submenu">
+									<li><a href="<?=base_url('pembelian_penerimaan')?>">Input Penerimaan</a></li>
+									<li><a href="<?=base_url('pembelian_lappenerimaan')?>">Laporan Penerimaan</a></li>
+								</ul>
+							</li>
+							<li><a href="<?=base_url('pembelian_pembayaran')?>">Pembayaran Hutang</a></li>
+							<li><a href="<?=base_url('pembelian_laphutang')?>">Laporan Hutang</a></li>
+							<li>
+								<a href="#">Stock<i class="icon-angle-right pull-right"></i></a>
+								<ul class="dropdown-submenu">
+									<li><a href="<?=base_url('stock_bahanbaku')?>">Bahan Baku</a></li>
+									<li><a href="<?=base_url('stock_bahanpenolong')?>">Bahan Penolong</a></li>
+									<li><a href="<?=base_url('stock_bahanteknik')?>">Bahan Teknik/Spare Part</a></li>
+									<li><a href="<?=base_url('stock_bahanumum')?>">Bahan Umum</a></li>
+								</ul>
+							</li>
 						</ul>
 					</li>
 					
