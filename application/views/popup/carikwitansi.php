@@ -2,6 +2,7 @@
 function sendValue(id_kwitansi,nilai,no_kwitansi){
 	window.opener.document.getElementById('id_kwitansi').value= id_kwitansi;
 	window.opener.document.getElementById('subtotal').value= nilai;
+	window.opener.document.getElementById('jumlah').value= nilai;
 	window.opener.document.getElementById('no_kwitansi').value= no_kwitansi;
 	//alert(Nama);
 	window.close();

@@ -163,7 +163,7 @@ Class Penjualan_invoice_m extends CI_Model{
 	}	
 	
 	function ceknoinv(){
-		$query=$this->db->query("select count(id_no_surat)as Jum from nosurat where jenis_surat='INV' and tahun='".date('Y')."'");
+		$query=$this->db->query("select count(id_no_surat)as Jum from nosurat where jenis_surat='INV' and tahun='".date('Y')."' and bulan='".date('m')."'");
 		$no=$query->row('Jum')+1;
 		if($no<10)
 			return '00'.$no;

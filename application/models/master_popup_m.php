@@ -204,4 +204,110 @@ class master_popup_m extends CI_Model{
 		$query = $this->db->query($q);
 		return $query->result();
 	}
+	
+	function cari_surat_pemesanan(){
+		$query = $this->db->query("
+			SELECT
+				a.id_pemesanan_h,
+				a.no_surat,
+				b.kode_suplier,
+				b.id_suplier,
+				b.nama,
+				b.alamat,
+				b.telpon,
+				c.id_pemesanan_d
+			FROM
+				pembelian_pemesanan_h AS a ,
+				mastersuplier AS b ,
+				pembelian_pemesanan_d AS c
+			WHERE
+				a.id_suplier = b.id_suplier AND
+				a.id_pemesanan_h = c.id_pemesanan_h
+			GROUP BY
+				a.id_pemesanan_h"
+		);
+		return $query->result();
+	}
+	
+	function cari_barang_pemesanan($id_pem,$id_sup){		
+		$query = $this->db->query("
+				SELECT
+					masterbarang.id_barang,
+					masterbarang.kode_barang,
+					masterbarang.nama_barang,
+					pembelian_pemesanan_d.kuantitas,
+					pembelian_pemesanan_d.id_pemesanan_d,
+					pembelian_pemesanan_h.id_pemesanan_h,
+					pembelian_pemesanan_h.keterangan
+				FROM
+					masterbarang ,
+					pembelian_pemesanan_d ,
+					pembelian_pemesanan_h
+				WHERE
+					masterbarang.id_barang = pembelian_pemesanan_d.id_barang and
+					pembelian_pemesanan_d.id_pemesanan_h = '$id_pem'
+		");
+		/*
+		$query = $this->db->query("
+				SELECT
+					pemesanan.id_pemesanan_h,
+					pemesanan.id_barang,
+					pemesanan.kuantitas,
+					penerimaan.total,
+					CASE
+				WHEN pemesanan.kuantitas = penerimaan.total THEN
+					'pass'
+				WHEN pemesanan.kuantitas > penerimaan.total THEN
+					'lanjut'
+				END AS STATUS
+				FROM
+					(
+						SELECT
+							pembelian_pemesanan_h.id_pemesanan_h,
+							pembelian_pemesanan_d.id_barang,
+							pembelian_pemesanan_d.kuantitas
+						FROM
+							(
+								SELECT
+									*
+								FROM
+									pembelian_pemesanan_h
+								WHERE
+									id_suplier = 1
+							) pembelian_pemesanan_h
+						LEFT JOIN pembelian_pemesanan_d ON pembelian_pemesanan_h.id_pemesanan_h = pembelian_pemesanan_d.id_pemesanan_h
+					) pemesanan
+				RIGHT JOIN (
+					SELECT
+						a1.id_pemesanan_h,
+						pembelian_penerimaan_d.id_barang,
+						SUM(
+							pembelian_penerimaan_d.kuantitas
+						) AS total
+					FROM
+						(
+							SELECT
+								pembelian_penerimaan_h.id_penerimaan_h,
+								pembelian_penerimaan_h.id_pemesanan_h
+							FROM
+								(
+									SELECT
+										*
+									FROM
+										pembelian_pemesanan_h
+									WHERE
+										id_suplier = $id_sup
+								) pembelian_pemesanan_h
+							LEFT JOIN pembelian_penerimaan_h ON pembelian_penerimaan_h.id_pemesanan_h = pembelian_pemesanan_h.id_pemesanan_h
+						) a1
+					LEFT JOIN pembelian_penerimaan_d ON a1.id_penerimaan_h = pembelian_penerimaan_d.id_penerimaan_h
+					GROUP BY
+						id_barang
+				) penerimaan ON pemesanan.id_pemesanan_h = penerimaan.id_pemesanan_h
+				AND pemesanan.id_barang = penerimaan.id_barang
+				AND pemesanan.id_pemesanan_h = $id_pem
+		");
+		*/
+		return $query;
+	}
 }

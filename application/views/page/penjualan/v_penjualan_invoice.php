@@ -191,7 +191,7 @@
 	
 	<div class="col-md-9">
 		<div class="block block-fill-white">
-			<input type="hidden" name="nourut" id="nourut">
+			<input type="text" name="nourut" id="nourut">
 			<input type="hidden" name="id_ttd" id="id_ttd">
 			<input type="hidden" name="id_cetak" id="id_cetak">
 			<input type="hidden" name="id_surat_jalan" id="id_surat_jalan" value="">

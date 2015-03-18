@@ -3,7 +3,7 @@
 Class penjualan_invoice extends CI_Controller{
 	function __construct() {
 		parent::__construct();
-		$this->load->model('penjualan_invoice_m');
+		$this->load->model(array('penjualan_invoice_m'));
     }
 	
 	public function index()

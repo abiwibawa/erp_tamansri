@@ -153,7 +153,6 @@ $(".simpan_order").click(function(){
 $(".simpan_sj").click(function(){
 	var vurl = $(this).attr("data-url");
 	var data2 = $("#form_suratjalan").serialize();
-	//alert(id_surat_jalan);
 	$.ajax({
 		type: "POST",
 		dataType: "json",
@@ -161,7 +160,6 @@ $(".simpan_sj").click(function(){
 		data: data2,
 		success: function(response){
 			window.location.replace(response.redir,'_blank');
-			//alert(response);
 		}
 	});
 });
@@ -169,7 +167,6 @@ $(".simpan_sj").click(function(){
 $(".simpan_kw").click(function(){
 	var vurl = $(this).attr("data-url");
 	var data2 = $("#form_kw").serialize();
-	//alert(id_surat_jalan);
 	$.ajax({
 		type: "POST",
 		dataType: "json",
@@ -226,7 +223,7 @@ $(".edit").click(function(){
 $("#form_suratjalan").on('submit',function(e){
 	var vurl = $(this).attr("action");
 	var data2 = $(this).serialize();
-	alert(data2);
+	//alert(data2);
 	$.ajax({
 		type: "POST",
 		dataType: "json",

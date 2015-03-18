@@ -115,4 +115,21 @@ class master_popup extends CI_Controller{
 		$data['page'] = 'popup/cariinvoice';
 		$this->load->view('popup/popup',$data);
 	}
+	
+	function carisuratpemesanan(){
+		$data['list'] = $this->master_popup_m->cari_surat_pemesanan();
+		//$data['penerimaan'] = $this->master_m->cari_penerimaan();
+		$data['page'] = 'popup/carisuratpemesanan';
+		$this->load->view('popup/popup',$data);
+	}
+	
+	function cari_barang(){
+		//$data = array();
+		$id_pem = $this->input->get("id_pemesanan");
+		$id_sup = $this->input->get("id_suplier");
+		$data['list'] = $this->master_popup_m->cari_barang_pemesanan($id_pem,$id_sup)->result();
+		$data['page'] = 'popup/cari_barang_pemesanan';
+		//echo $data['td'];
+		$this->load->view('popup/popup',$data);
+	}
 }

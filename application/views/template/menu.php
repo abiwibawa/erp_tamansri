@@ -88,8 +88,8 @@
 							<li>
 								<a href="#">Penerimaan<i class="icon-angle-right pull-right"></i></a>
 								<ul class="dropdown-submenu">
-									<li><a href="<?=base_url('pembelian_penerimaan')?>">Input Penerimaan</a></li>
-									<li><a href="<?=base_url('pembelian_lappenerimaan')?>">Laporan Penerimaan</a></li>
+									<li><a href="<?=base_url('pembelian_penerimaan_barang')?>">Input Penerimaan</a></li>
+									<li><a href="<?=base_url('pembelian_lappenerimaan_barang')?>">Laporan Penerimaan</a></li>
 								</ul>
 							</li>
 							<li><a href="<?=base_url('pembelian_pembayaran')?>">Pembayaran Hutang</a></li>

@@ -71,4 +71,38 @@ Class Gp_m extends CI_Model{
 		
 		return $tanggal.$bulan.$tahun;
 	}
+
+	public function nosurat($id_transaksi,$id_customer,$jenis_surat,$tanggal){
+		$tahun = date('Y',strtotime($tanggal));
+		$bulan = date('m',strtotime($tanggal));
+		$tanggal = date('d',strtotime($tanggal));
+		
+		$next_number =  $this->NextNumber($tahun,$bulan,$jenis_surat);
+		
+		$simpan = array('no_surat'=>$next_number,
+								'id_transaksi'=>$id_transaksi,
+								'id_customer'=>$id_customer,
+								'jenis_surat'=>$jenis_surat,
+								'bulan'=>$bulan,
+								'tanggal'=>$tanggal,
+								'tahun'=>$tahun
+								);
+		$this->simpan->SimpanMaster('nosurat',$simpan);
+	}
+	
+		
+	public function NextNumber($tahun,$bulan,$js){
+		$next = 1;
+		$this->db->select_max('no_surat');
+		$this->db->where('jenis_surat',$js);
+		$this->db->where('tahun',$tahun);
+		$this->db->where('bulan',$bulan);
+		$query = $this->db->get('nosurat');
+		if($query->num_rows()>0){
+			$hasil = $query->row();
+			$next = $hasil->no_surat+1;
+		}
+		
+		return $next;
+	}
 }

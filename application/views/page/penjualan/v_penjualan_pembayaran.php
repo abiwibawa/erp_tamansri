@@ -9,6 +9,73 @@
 		var vurl = "<?=base_url('master_popup/carikwitansi')?>";
 		window.open(vurl+'?idcustomer='+id_customer,'popuppage','width=700,toolbar=0,resizable=1,scrollbars=yes,height=500,top=100,left=100,address=0');
 	}
+	$(function() {
+		$(".penjualan_pembayaran").click(function(){
+			var vurl = $(this).attr("data-url");
+			var data2 = $("#form_pembayaran_penjualan").serialize();
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url : vurl,
+				data: data2,
+				success: function(response){
+					if(response.status=="true"){
+						window.location.replace(response.redir,'_blank');
+					}else{
+						alert(response.status)
+					}
+				}
+			});
+		});
+		
+		$("#jumlah").keyup(function(){
+			if($(this).val()!=""){
+				var bayar = parseInt($(this).val());
+			}else{
+				var bayar = 0;
+			}
+			if($("#debet").val()!=""){
+				var debit = parseInt($("#debet").val());
+			}else{
+				var debit = 0;
+			}
+			
+			var jumlah = bayar+debit;
+			$("#total").val(jumlah);
+		});
+		
+		$("#debet").keyup(function(){
+			if($("#jumlah").val()!=""){
+				var bayar = parseInt($("#jumlah").val());
+			}else{
+				var bayar = 0;
+			}
+			if($(this).val()!=""){
+				var debit = parseInt($(this).val());
+			}else{
+				var debit = 0;
+			}
+			
+			var jumlah = bayar+debit;
+			$("#total").val(jumlah);
+		});
+		
+		$("#total").click(){
+			if($("#jumlah").val()!=""){
+				var bayar = parseInt($("#jumlah").val());
+			}else{
+				var bayar = 0;
+			}
+			if($("#debit").val()!=""){
+				var debit = parseInt($("#debit").val());
+			}else{
+				var debit = 0;
+			}
+			
+			var jumlah = bayar+debit;
+			$("#total").val(jumlah);
+		}
+	});
 </script>
 <div class="row">             
 	<div class="col-md-12">
@@ -17,7 +84,7 @@
 				<div class="header">
 					<h2>Pembayaran Piutang</h2>
 					<div class="side pull-right">
-						<button class="simpan_order btn btn-primary" data-url="<?=base_url('penjualan_pembayaran/aprove_order')?>">
+						<button class="penjualan_pembayaran btn btn-primary" data-url="<?=base_url('penjualan_pembayaran/simpan')?>">
 							<i class="icon-save"></i>&nbsp;&nbsp;simpan
 						</button>
 						
@@ -33,9 +100,9 @@
 			</div>
 		</div>
 	</div>
-	<form action="<?=$action_form?>" id="form_pembayaran" method="post">
+	<form action="#" id="form_pembayaran_penjualan" method="post">
 	<input type="hidden" name="id_piutang" id="id_piutang" value="">
-	<input type="hidden" name="id_temp" id="id_temp" value="<?=$this->form_data->id_temp?>">
+	<input type="hidden" name="key" id="key" value="<?=$this->form_data->key?>">
 	<div class="col-md-9">
 		<div class="block block-fill-white">
 			<div class="header">
@@ -51,6 +118,20 @@
 							<?=form_input('tanggal','','class="datepicker form-control" id="tanggal" ')?>
 						</div>
 					</div>
+					<div class="col-md-2">Akun Bank</div>
+					<div class="col-md-2">
+						<div class="input-group">
+							<?=form_dropdown('id_akun_bank',$cmbakunbank,$this->form_data->id_akun_bank,'class="form-control" id="id_akun_bank" ')?>
+						</div>
+					</div>
+					<div class="col-md-2">Kode Perkiraan</div>
+					<div class="col-md-2">
+						<div class="input-group">
+							<input type="hidden" name="id_rek" id="id_rek" value="010201">
+							<input type="hidden" name="id_rek_lawan" id="id_rek_lawan" value="010401">
+							<?=form_input('no_perkiraan','120.00','class="form-control" id="no_perkiraan" readonly')?>
+						</div>
+					</div>
 				</div>
 				
 				<div class="form-row">
@@ -63,34 +144,22 @@
 				</div>
 				
 				<div class="form-row">
-					<div class="col-md-2">Jenis Pembayaran</div>
-					<div class="col-md-4"><?=form_dropdown('jenis_bayar',array('1'=>'Giro','2'=>'Cek','3'=>'Tunai Transfer'),'','class="form-control" ')?></div>
+					<div class="col-md-2">Memo</div>
+					<div class="col-md-10"><?=form_input('memo','','class="form-control" id="memo" ')?></div>
 				</div>
 				
 				<div class="form-row">
-					<div class="col-md-2">Bank Asal</div>
-					<div class="col-md-4"><?=form_input('bank_asal','','class="form-control" ')?></div>
-					
-					<div class="col-md-2">Bank Tujuan</div>
-					<div class="col-md-4"><?=form_input('bank_tujuan','','class="form-control" ')?></div>
+					<div class="col-md-2">No. Kwitansi:</div>
+					<div class="col-md-3"><?=form_input('no_kwitansi','','class="form-control" id="no_kwitansi" readonly ')?></div>
+					<input type="hidden" name="id_kwitansi" id="id_kwitansi">
+					<div class="col-md-1"><button type="button" class="cari_produk btn btn-success" onClick="popupproduk()">cari</button></div>
+					<div class="col-md-2">Nilai : Rp</div>
+					<div class="col-md-4"><?=form_input('subtotal','','class="form-control" id="subtotal" readonly')?></div>
 				</div>
-				
 				<div class="form-row">
-					<div class="col-md-2">Rekening Asal</div>
-					<div class="col-md-4"><?=form_input('no_account_asal','','class="form-control" ')?></div>
-					
-					<div class="col-md-2">Rekening Tujuan</div>
-					<div class="col-md-4"><?=form_input('no_account_tujuan','','class="form-control" ')?></div>
-				</div>
-				
-				<div class="form-row">
-					<div class="col-md-2">Bank Giro</div>
-					<div class="col-md-4"><?=form_input('bank_giro','','class="form-control" ')?></div>
-					
-					<div class="col-md-2">No Giro</div>
-					<div class="col-md-4"><?=form_input('no_giro','','class="form-control" ')?></div>
-				</div>
-				
+					<div class="col-md-3">Yang Dibayar : Rp</div>
+					<div class="col-md-4"><?=form_input('jumlah','','class="form-control" id="jumlah" ')?></div>
+				</div>	
 			</div>
 		</div>
 	</div>
@@ -100,20 +169,10 @@
 			<div class="header">
 				<h2>Biaya</h2>
 			</div>				
-			<div class="content controls">
+			<div class="content controls">				
 				<div class="form-row">
-					<div class="col-md-4">Tagihan:</div>
-					<div class="col-md-7"><?=form_input('total','','class="form-control" id="total" readonly="readonly" ')?></div>
-				</div>
-				
-				<div class="form-row">
-					<div class="col-md-4">Yang di Bayar:</div>
-					<div class="col-md-7"><?=form_input('nilai','0','class="form-control" id="pengiriman" ')?></div>
-				</div>
-				
-				<div class="form-row">
-					<div class="col-md-4">Sisa Tagihan:</div>
-					<div class="col-md-7"><?=form_input('sisa','','class="form-control" id="total_harga" readonly="readonly" ')?></div>
+					<div class="col-md-4">Total Bayar:</div>
+					<div class="col-md-7"><?=form_input('total','0','class="form-control" id="total" readonly')?></div>
 				</div>
 			</div>
 		</div>
@@ -122,40 +181,62 @@
 	<div class="col-md-12">
 		<div class="block block-fill-white">
 			<div class="header">
-				<h4>Detail Pembayaran</h4>
+				<h4>Biaya Operasional / Transaksi Lain-lain</h4>
 			</div>
 			
 			<div class="content controls">
 				<div class="form-row">
-					<div class="col-md-1">No. Kwitansi:</div>
-					<div class="col-md-4"><?=form_input('no_kwitansi','','class="form-control" id="no_kwitansi" readonly ')?></div>
-					<input type="hidden" name="id_kwitansi" id="id_kwitansi">
-					<div class="col-md-1"><button type="button" class="cari_produk btn btn-success" onClick="popupproduk()">cari</button></div>
-					<div class="col-md-1">Nilai : Rp</div>
-					<div class="col-md-4"><?=form_input('subtotal','','class="form-control" id="subtotal" readonly')?></div>
+					<div class="col-md-2">Kode Perkiraan</div>
+					<div class="col-md-2">
+						<div class="input-group">
+							<?=form_dropdown('id_perkiraan_hutang',$cmb_perkiraanhutang,'','class="form-control" id="id_perkiraan_hutang" ')?>
+						</div>
+					</div>
 				</div>
-				
 				<div class="form-row">
-					<div class="col-md-12"><button type="submit" class="btn_tambah btn btn-block btn-success">tambahkan</button></div>
+					<div class="col-md-1">Debet</div>
+					<div class="col-md-4"><?=form_input('debet','','class="form-control" id="debet" ')?></div>
+					<div class="col-md-1">Kredit</div>
+					<div class="col-md-4"><?=form_input('kredit','','class="form-control" id="kredit" ')?></div>
 				</div>
-			</div>
-			
-			<div class="content">
-				<table cellpadding="0" cellspacing="0" width="100%" class="table table-bordered table-striped">
-				<thead>
-					<tr>
-						<th width="5%">No</th>
-						<th width="25%">No Kwitansi</th>
-						<th width="5%">Nilai</th>
-						<th width="5%">Aksi</th>                              
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-				</table>
-			</div>
-			
+				<div class="form-row">
+					<div class="col-md-1">Keterangan:</div>
+					<div class="col-md-10"><?=form_input('keterangan','','class="form-control" id="keterangan" ')?></div>
+				</div>
+			</div>			
 		</div>
 	</div>
 	</form>
+</div>
+
+<div class="modal modal-danger" id="modal_confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body clearfix">
+			</div>
+			<div class="modal-footer">                
+				<button type="button" class="btn btn-default btn-clean" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal modal-success" id="modal_success" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body clearfix">
+			</div>
+			<div class="modal-footer">                
+				<button type="button" class="btn btn-default btn-clean" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
 </div>
