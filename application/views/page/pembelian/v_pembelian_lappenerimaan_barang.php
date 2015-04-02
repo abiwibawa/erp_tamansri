@@ -41,6 +41,29 @@ $(document).ready(function(){
 			$("#nama_suplier").hide();
 		}
 	})
+
+	$(".detil_penerimaan").click(function(){
+		var id_order = $(this).attr("data-id");
+		var vurl = $(this).attr("data-url");
+		var title = $(this).attr("data-title");
+		//alert(id_order);
+		var parsing = {id_order:id_order};
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url : vurl,
+			data: parsing,
+			success: function(response){
+				//alert(response.vtabel);
+				$("#modal_default_3").modal("show");
+				$("#modal_default_3 .modal-header .modal-title").html(title);
+				$("#modal_default_3 .modal-body").html(response.vtabel);
+			}
+		});
+	});
+	$(".TampilSemua").click(function(){
+				location.reload();
+			});
 })
 
 function popup_carisuplier(){
@@ -75,27 +98,29 @@ function popup_carisuplier(){
 			<div class="header">
 				<h2>Filter</h2>
 			</div>
-			<form id="validate" method="POST" action="<?=base_url('pembelian_lappenerimaan_barang/filter')?>">
+			<form id="" method="POST" action="<?=base_url('pembelian_lappenerimaan_barang/filter')?>">
 			<?php
 				$isi_cmb = array(
-							''=>'--Silahkan Pilih Terlebih Dahulu--',
+							''=>'--Semua--',
 							'b.no_surat' => 'No. Surat Pemesanan',
-							'd.no_surat_jalan' => 'No. Surat Jalan',
-							'd.tanggal' => 'Tanggal Masuk',
-							'e.kode_suplier' => 'Kode Suplier',
-							'e.nama' => 'Nama Suplier'
+							'a.no_surat_jalan' => 'No. Surat Jalan',
+							'a.tanggal' => 'Tanggal Masuk',
+							'b.kode_suplier' => 'Kode Suplier',
+							'b.nama' => 'Nama Suplier'
 						);
 			?>
 			<div class="content controls">
 				<div class="form-row">
 					<div class="col-md-1">Filter</div>
-					<div class="col-md-4">
-						<?=form_dropdown('filter',$isi_cmb,$this->form_data->cmb,'class="form-control validate[required]" id="filter" ')?>
+					<div class="col-md-3">
+						<?=form_dropdown('filter',$isi_cmb,$this->form_data->cmb,'class="form-control id="filter" ')?>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<?=form_input('value',$this->form_data->value,'class="form-control validate[required]" id="" ')?>
 					</div>
-					<div class="col-md-2"><button type="submit" class="btn_tambah btn btn-block btn-success">proses</button></div>
+					<div class="col-md-2">
+						<button type="submit" class="btn_tambah btn btn-block btn-success">proses</button>
+					</div>
 				</div>	
 			</div>
 			</form>
@@ -145,9 +170,9 @@ function popup_carisuplier(){
 						<td width="10%"><?=$row->no_surat_jalan?></td>
 						<td width="10%"><?=$row->tanggal?></td>
 						<td width="10%" align="center">
-						<a href="#modal_default_3" data-toggle="modal" class="detil_penerimaan btn btn-info tip icon-search" title="Detail" data-id="<?=$row->no_surat_jalan?>" data-url="<?=base_url('pembelian_lappenerimaan_barang/detail_modal')?>" data-wd="700px" data-title="Detail Penerimaan NO Surat Jalan <?=$row->no_surat_jalan?>">&nbsp;</a>
-						<?=anchor(base_url("pembelian_lappenerimaan_barang/edit/".$row->no_surat),'&nbsp;','data-toggle="modal" class="btn btn-warning tip icon-pencil" title="Edit"');?>
-						<?=anchor(base_url("pembelian_lappenerimaan_barang/delete/".$row->no_surat),'&nbsp;','data-toggle="modal" class="btn btn-danger tip icon-trash" title="Hapus"');?>
+						<a href="#modal_default_3" data-toggle="modal" class="detil_penerimaan btn btn-info tip icon-search" title="Detail" data-id="<?=$row->id_penerimaan_h?>" data-url="<?=base_url('pembelian_lappenerimaan_barang/detail_modal')?>" data-wd="700px" data-title="Detail Penerimaan NO Surat Jalan <?=$row->no_surat_jalan?>">&nbsp;Detail</a>
+						<?=anchor(base_url("pembelian_lappenerimaan_barang/edit/".$row->id_penerimaan_h),'&nbsp;Edit','data-toggle="modal" class="btn btn-warning tip icon-pencil" title="Edit"');?>
+						<?=anchor(base_url("pembelian_lappenerimaan_barang/cetak/".$row->id_penerimaan_h),'&nbsp;Cetak','data-toggle="modal" target="_blank" class="btn btn-danger tip icon-trash" title="Hapus"');?>
 						</td>                              
 					</tr>
 				<?php

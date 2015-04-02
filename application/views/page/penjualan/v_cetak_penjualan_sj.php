@@ -246,7 +246,7 @@
 				<p>No. : <?=$header['no_surat_jalan']?></p>
 			</div>
 		</div>
-		<div class="tengah"> <!-- TABEL BAGIAN TENGAH --> 
+		<div class="tengah"> <!-- TABEL BAGIAN TENGAH -->
 			<table>
 				<tr>
 					<th>No</th>
@@ -270,12 +270,46 @@
 					<td><?=$row['satuan']?></td>
 					<td><?=$row['keterangan']?></td>
 				</tr>
-				<?php $no++; }
-				/* while($no<=37){
-					echo "<tr class='trtengah'><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
-					$no++;
-				} */
-				?>
+				<?php $no++; } ?>
+				<tr class="trtengah">
+					<td align="center">
+					<?php
+					while($no<=37){
+							echo "<br>";
+						$no++;
+					};
+					?>
+					</td>
+					<td align="center">
+					<?php
+					while($no<=37){
+							echo "<br>";
+						$no++;
+					};
+					?>
+					</td><td align="center">
+					<?php
+					while($no<=37){
+							echo "<br>";
+						$no++;
+					};
+					?>
+					</td><td align="center">
+					<?php
+					while($no<=37){
+							echo "<br>";
+						$no++;
+					};
+					?>
+					</td><td align="center">
+					<?php
+					while($no<=37){
+							echo "<br>";
+						$no++;
+					};
+					?>
+					</td>
+				</tr>
 			</table>
 		</div>
 		<div class="bawah"> <!-- TABEL BAGIAN BAWAH -->

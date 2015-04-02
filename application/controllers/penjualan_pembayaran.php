@@ -35,42 +35,22 @@ Class penjualan_pembayaran extends CI_Controller{
 			$this->simpan->SimpanMaster('debit_h',$save_debet_h);
 			$this->simpan->SimpanMaster('kredit_h',$save_debet_h);
 			
-			if($getPost['debet']!="" || $getPost['kredit']!=""){
-				if(intval($getPost['debet'])>intval($getPost['kredit'])){
-					$jum_debit['jumlah'] = intval($getPost['jumlah']);
-					$jum_kredit['jumlah'] = intval($getPost['jumlah'])+intval($getPost['debet']);
-					$nilaitambahan['jumlah'] = intval($getPost['debet']);
-				}else{
-					$jum_debit['jumlah'] = intval($getPost['jumlah'])-intval($getPost['kredit']);
-					$jum_kredit['jumlah'] = intval($getPost['jumlah']);
-					$nilaitambahan['jumlah'] = intval($getPost['kredit']);
-				}
-			}else{
-				$jum_debit['jumlah'] = intval($getPost['jumlah']);
-				$jum_kredit['jumlah'] = intval($getPost['jumlah']);
-				$nilaitambahan['jumlah'] = "";
-			}
-			
+			$jum_debit['jumlah'] = intval($getPost['jumlah']);
 			$select_deb = array('id_debit_h');
 			$debit_h = $this->getdatatabel->getbyid('debit_h',$select_deb,$wherecek);
-			$save_deb_d = elements(array('id_rek'),$getPost);
+			$save_deb_d = array('id_rek'=>$getPost['id_akun_bank']);
 			$save_deb_d = $save_deb_d+$jum_debit+array('id_debit_h'=>$debit_h['id_debit_h'])+array('keterangan'=>$getPost['memo']);
 			$this->simpan->SimpanMaster('debit_d',$save_deb_d);
 			
-			
+			$jum_kredit['jumlah'] = intval($getPost['jumlah']);
 			$select_ker = array('id_kredit_h');
 			$kredit = $this->getdatatabel->getbyid('kredit_h',$select_ker,$wherecek);
-			$save_kred_d['id_rek'] = $getPost['id_rek_lawan'];
+			$save_kred_d['id_rek'] = $getPost['id_rek'];
 			$save_kred_d = $save_kred_d+$jum_kredit+array('id_kredit_h'=>$kredit['id_kredit_h'])+array('keterangan'=>$getPost['memo']);
 			$this->simpan->SimpanMaster('kredit_d',$save_kred_d);
-			
-			if($nilaitambahan['jumlah']!=""){
-				$nilaitambahan = $nilaitambahan+array('id_debit_h'=>$debit_h['id_debit_h'])+array('keterangan'=>$getPost['keterangan'])+array('id_rek'=>$getPost['id_perkiraan_hutang']);
-				$this->simpan->SimpanMaster('debit_d',$nilaitambahan);
-			}
-			
-			$jurnal = elements(array('id_akun_bank','id_customer'),$getPost);
-			$jurnal = $jurnal+array('id_kredit_h'=>$kredit['id_kredit_h'])+array('id_debit_h'=>$debit_h['id_debit_h'])+$tanggal+array('id_jenis_jurnal'=>'1')+array('no_dokumen'=>$getPost['no_kwitansi'])+array('memo'=>$getPost['memo']);
+						
+			$jurnal = elements(array('id_customer'),$getPost);
+			$jurnal = $jurnal+array('id_kredit_h'=>$kredit['id_kredit_h'])+array('id_debit_h'=>$debit_h['id_debit_h'])+$tanggal+array('id_jenis_jurnal'=>'1')+array('no_dokumen'=>$getPost['no_kwitansi'])+array('memo'=>$getPost['memo'])+array('id_transaksi'=>$getPost['id_kwitansi']);
 			$this->simpan->SimpanMaster('jurnal',$jurnal);
 			$hasil['status']="true";
 			$hasil['redir']=base_url('penjualan_pembayaran');
@@ -85,7 +65,7 @@ Class penjualan_pembayaran extends CI_Controller{
 		$q = "select * from kode_perkiraan where CHAR_LENGTH(no_perkiraan)>2 AND LEFT(no_perkiraan,2) = '10'";
 		$query = $this->db->query($q);
 		foreach($query->result() as $row){
-			$cmb[$row->no_perkiraan] = $row->uraian;
+			$cmb[$row->id_perkiraan] = $row->uraian;
 		}
 		return $cmb;
 	}

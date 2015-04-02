@@ -105,5 +105,4 @@
 	<script type='text/javascript' src='<?=base_url()?>js/settings.js'></script>
 	<script type='text/javascript' src='<?=base_url()?>js/tamansri.js'></script>
 	<script type='text/javascript' src='<?=base_url()?>js/hapus.js'></script>
-	<script type='text/javascript' src='<?=base_url()?>js/rofiq.js'></script>
 </html>

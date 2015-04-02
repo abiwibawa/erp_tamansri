@@ -4,6 +4,7 @@ function sendValue(id,kode,nama,qty){
 	window.opener.document.getElementById('kd_barang').value= kode;
 	window.opener.document.getElementById('nama_barang').value= nama;
 	window.opener.document.getElementById('kuantitas_barang').value= qty;
+	window.opener.document.getElementById('qty_barang').value= qty;
 	//alert(kode);
 	window.close();
 }
@@ -33,9 +34,9 @@ function sendValue(id,kode,nama,qty){
 						<td><a style="text-decoration:none;" href="" ><?=$no?></a></td>
 						<td><a style="text-decoration:none;" href="" ><?=$row->kode_barang?></a></td>
 						<td><a style="text-decoration:none;" ><?=$row->nama_barang?></a></td>
-						<td><a style="text-decoration:none;" ><?=$row->kuantitas?></a></td>
+						<td><a style="text-decoration:none;" ><?=$row->kuantitas-$row->total?></a></td>
 						<td><a style="text-decoration:none;" class="btn btn-success btn-clean" href="" 
-						onClick="sendValue('<?=$row->id_barang?>','<?=$row->kode_barang?>','<?=$row->nama_barang?>','<?=$row->kuantitas?>')">
+						onClick="sendValue('<?=$row->id_barang?>','<?=$row->kode_barang?>','<?=$row->nama_barang?>','<?=$row->kuantitas-$row->total?>')">
 						select
 						</a></td>
 					</tr>

@@ -7,7 +7,7 @@
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-reorder"></span>                            
 				</button>                                                
-				<a class="navbar-brand" href="<?=base_url()?>"><img src="img/logo.png"/></a>                                                                                     
+				<a class="navbar-brand" href="<?=base_url()?>"><img src="<?=base_url()?>img/logo.png"/></a>                                                                                     
 			</div>
 			<div class="collapse navbar-collapse navbar-ex1-collapse">                                     
 				<ul class="nav navbar-nav">                            
@@ -32,7 +32,7 @@
 							<li>
 								<a href="#">Order <i class="icon-angle-right pull-right"></i></a>
 								<ul class="dropdown-submenu">
-									<li><a href="<?=base_url('penjualan_order')?>">Input Order</a></li>
+									<li><a href="<?=base_url('penjualan_order_')?>">Input Order</a></li>
 									<li><a href="<?=base_url('penjualan_laporder')?>">Riwayat Input Order</a></li>
 								</ul>
 							</li>

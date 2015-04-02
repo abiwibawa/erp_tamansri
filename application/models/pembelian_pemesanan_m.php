@@ -35,6 +35,28 @@ class pembelian_pemesanan_m extends CI_Model{
 		return array('vtabel'=>$tabel,'subtotal'=>$subtotal);
 	}
 	
+	function listorderdetailhistory($id_pemesanan_h){
+		
+		$query = $this->db->query("select * from (select * from pembelian_pemesanan_d where id_pemesanan_h='".$id_pemesanan_h."')a left join (select * from masterbarang)b on a.id_barang=b.id_barang");
+		$no=1;
+		$tabel='<table border=1 width="100%">';
+		$tabel.='<tr><td>No</td><td>Kode / Nama Barang</td><td>Satuan</td><td>Harga</td><td>Kuantitas</td><td>Total</td></tr>';
+		$subtotal=0;
+		if($query->num_rows()>0){
+			foreach($query->result() as $row){
+				$ttl=$row->kuantitas*$row->harga;
+				$subtotal=$subtotal+$ttl;
+				$tabel .= "<tr><td>".$no."</td><td>".$row->kode_barang."/".$row->nama_barang."</td><td>".$row->satuan."</td><td>".$row->kuantitas."</td><td>".$this->gp_m->Rupiah($row->harga)."</td><td>".$this->gp_m->Rupiah($ttl)."</td></tr>";
+				$no++;
+			}
+			$tabel .= "<tr><td colspan='5' align='right'>JUMLAH TOTAL Rp.</td><td>".$this->gp_m->Rupiah($subtotal)."</td></tr>";
+		}else{
+			$tabel .= "<tr><td colspan='6' align='center'>Tidak Ditemukan Detail Order</td></tr>";
+		}
+		$tabel .= "</table>";
+		return array('vtabel'=>$tabel,'subtotal'=>$subtotal);
+	}
+	
 	function simpanpemesanan(){
 		$data=array(
 					"id_suplier"=>$this->input->post("id_suplier"),
@@ -42,7 +64,8 @@ class pembelian_pemesanan_m extends CI_Model{
 					"tanggal_pemesanan"=>date('Y-m-d',strtotime($this->input->post('tanggalpemesanan'))),
 					"tanggal_pengiriman"=>date('Y-m-d',strtotime($this->input->post('tanggalpengiriman'))),
 					"syarat_pembayaran"=>$this->input->post("syarat_pembayaran"),
-					"keterangan"=>$this->input->post("keterangan")
+					"keterangan"=>$this->input->post("keterangan"),
+					"ppn"=>$this->input->post("ppn")
 					);
 		$this->simpan->SimpanMaster('pembelian_pemesanan_h',$data);
 		$q=$this->db->query("select id_pemesanan_h from pembelian_pemesanan_h order by id_pemesanan_h desc limit 1");
@@ -68,7 +91,8 @@ class pembelian_pemesanan_m extends CI_Model{
 					"tanggal_pemesanan"=>date('Y-m-d',strtotime($this->input->post('tanggalpemesanan'))),
 					"tanggal_pengiriman"=>date('Y-m-d',strtotime($this->input->post('tanggalpengiriman'))),
 					"syarat_pembayaran"=>$this->input->post("syarat_pembayaran"),
-					"keterangan"=>$this->input->post("keterangan")
+					"keterangan"=>$this->input->post("keterangan"),
+					"ppn"=>$this->input->post("ppn")
 					);
 		$this->update->update2('pembelian_pemesanan_h',$data,array('id_pemesanan_h'=>$this->input->post('id_pemesanan_h')));
 		

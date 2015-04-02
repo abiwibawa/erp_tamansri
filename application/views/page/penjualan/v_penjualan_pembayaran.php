@@ -13,6 +13,7 @@
 		$(".penjualan_pembayaran").click(function(){
 			var vurl = $(this).attr("data-url");
 			var data2 = $("#form_pembayaran_penjualan").serialize();
+			//console.log(data2);
 			$.ajax({
 				type: "POST",
 				dataType: "json",
@@ -27,54 +28,6 @@
 				}
 			});
 		});
-		
-		$("#jumlah").keyup(function(){
-			if($(this).val()!=""){
-				var bayar = parseInt($(this).val());
-			}else{
-				var bayar = 0;
-			}
-			if($("#debet").val()!=""){
-				var debit = parseInt($("#debet").val());
-			}else{
-				var debit = 0;
-			}
-			
-			var jumlah = bayar+debit;
-			$("#total").val(jumlah);
-		});
-		
-		$("#debet").keyup(function(){
-			if($("#jumlah").val()!=""){
-				var bayar = parseInt($("#jumlah").val());
-			}else{
-				var bayar = 0;
-			}
-			if($(this).val()!=""){
-				var debit = parseInt($(this).val());
-			}else{
-				var debit = 0;
-			}
-			
-			var jumlah = bayar+debit;
-			$("#total").val(jumlah);
-		});
-		
-		$("#total").click(){
-			if($("#jumlah").val()!=""){
-				var bayar = parseInt($("#jumlah").val());
-			}else{
-				var bayar = 0;
-			}
-			if($("#debit").val()!=""){
-				var debit = parseInt($("#debit").val());
-			}else{
-				var debit = 0;
-			}
-			
-			var jumlah = bayar+debit;
-			$("#total").val(jumlah);
-		}
 	});
 </script>
 <div class="row">             
@@ -103,7 +56,7 @@
 	<form action="#" id="form_pembayaran_penjualan" method="post">
 	<input type="hidden" name="id_piutang" id="id_piutang" value="">
 	<input type="hidden" name="key" id="key" value="<?=$this->form_data->key?>">
-	<div class="col-md-9">
+	<div class="col-md-12">
 		<div class="block block-fill-white">
 			<div class="header">
 				<h4>Header Pembayaran</h4>
@@ -115,13 +68,7 @@
 					<div class="col-md-2">
 						<div class="input-group">
 							<div class="input-group-addon"><span class="icon-calendar-empty"></span></div>
-							<?=form_input('tanggal','','class="datepicker form-control" id="tanggal" ')?>
-						</div>
-					</div>
-					<div class="col-md-2">Akun Bank</div>
-					<div class="col-md-2">
-						<div class="input-group">
-							<?=form_dropdown('id_akun_bank',$cmbakunbank,$this->form_data->id_akun_bank,'class="form-control" id="id_akun_bank" ')?>
+							<?=form_input('tanggal','','class="datepicker form-control ckform" id="tanggal" ')?>
 						</div>
 					</div>
 					<div class="col-md-2">Kode Perkiraan</div>
@@ -129,18 +76,24 @@
 						<div class="input-group">
 							<input type="hidden" name="id_rek" id="id_rek" value="010201">
 							<input type="hidden" name="id_rek_lawan" id="id_rek_lawan" value="010401">
-							<?=form_input('no_perkiraan','120.00','class="form-control" id="no_perkiraan" readonly')?>
+							<?=form_input('no_perkiraan','120.00','class="form-control ckform" id="no_perkiraan" readonly')?>
+						</div>
+					</div>
+					<div class="col-md-2">Akun Bank</div>
+					<div class="col-md-2">
+						<div class="input-group">
+							<?=form_dropdown('id_akun_bank',$cmbakunbank,$this->form_data->id_akun_bank,'class="form-control ckform" id="id_akun_bank" ')?>
 						</div>
 					</div>
 				</div>
 				
 				<div class="form-row">
 					<div class="col-md-2">Kode Customer</div>
-					<div class="col-md-3"><?=form_input('kode_customer','','class="form-control" id="kode_customer" readonly')?></div>
+					<div class="col-md-3"><?=form_input('kode_customer','','class="form-control ckform" id="kode_customer" readonly')?></div>
 					<div class="col-md-1"><button type="button" id="btn_cari_custom" class="btn btn-success" onclick="popupcaricustomer()">cari</button></div>
 					<input type="hidden" name="id_customer" id="id_customer">
 					<div class="col-md-2">Nama Customer</div>
-					<div class="col-md-4"><?=form_input('nama_customer','','class="form-control" id="nama_customer" readonly="readonly"')?></div>
+					<div class="col-md-4"><?=form_input('nama_customer','','class="form-control ckform" id="nama_customer" readonly="readonly"')?></div>
 				</div>
 				
 				<div class="form-row">
@@ -150,7 +103,7 @@
 				
 				<div class="form-row">
 					<div class="col-md-2">No. Kwitansi:</div>
-					<div class="col-md-3"><?=form_input('no_kwitansi','','class="form-control" id="no_kwitansi" readonly ')?></div>
+					<div class="col-md-3"><?=form_input('no_kwitansi','','class="form-control ckform" id="no_kwitansi" readonly ')?></div>
 					<input type="hidden" name="id_kwitansi" id="id_kwitansi">
 					<div class="col-md-1"><button type="button" class="cari_produk btn btn-success" onClick="popupproduk()">cari</button></div>
 					<div class="col-md-2">Nilai : Rp</div>
@@ -158,12 +111,12 @@
 				</div>
 				<div class="form-row">
 					<div class="col-md-3">Yang Dibayar : Rp</div>
-					<div class="col-md-4"><?=form_input('jumlah','','class="form-control" id="jumlah" ')?></div>
-				</div>	
+					<div class="col-md-4"><?=form_input('jumlah','','class="form-control ckform" id="jumlah" ')?></div>
+				</div>
 			</div>
 		</div>
 	</div>
-	
+	<!--
 	<div class="col-md-3">
 		<div class="block block-fill-white">
 			<div class="header">
@@ -172,7 +125,7 @@
 			<div class="content controls">				
 				<div class="form-row">
 					<div class="col-md-4">Total Bayar:</div>
-					<div class="col-md-7"><?=form_input('total','0','class="form-control" id="total" readonly')?></div>
+					<div class="col-md-7"><?//=form_input('total','0','class="form-control" id="total" readonly')?></div>
 				</div>
 			</div>
 		</div>
@@ -189,23 +142,23 @@
 					<div class="col-md-2">Kode Perkiraan</div>
 					<div class="col-md-2">
 						<div class="input-group">
-							<?=form_dropdown('id_perkiraan_hutang',$cmb_perkiraanhutang,'','class="form-control" id="id_perkiraan_hutang" ')?>
+							<?//=form_dropdown('id_perkiraan_hutang',$cmb_perkiraanhutang,'','class="form-control" id="id_perkiraan_hutang" ')?>
 						</div>
 					</div>
 				</div>
 				<div class="form-row">
 					<div class="col-md-1">Debet</div>
-					<div class="col-md-4"><?=form_input('debet','','class="form-control" id="debet" ')?></div>
+					<div class="col-md-4"><?//=form_input('debet','','class="form-control" id="debet" ')?></div>
 					<div class="col-md-1">Kredit</div>
-					<div class="col-md-4"><?=form_input('kredit','','class="form-control" id="kredit" ')?></div>
+					<div class="col-md-4"><?//=form_input('kredit','','class="form-control" id="kredit" ')?></div>
 				</div>
 				<div class="form-row">
 					<div class="col-md-1">Keterangan:</div>
-					<div class="col-md-10"><?=form_input('keterangan','','class="form-control" id="keterangan" ')?></div>
+					<div class="col-md-10"><?//=form_input('keterangan','','class="form-control" id="keterangan" ')?></div>
 				</div>
 			</div>			
 		</div>
-	</div>
+	</div>-->
 	</form>
 </div>
 

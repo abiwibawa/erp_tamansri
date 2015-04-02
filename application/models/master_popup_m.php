@@ -2,7 +2,7 @@
 
 class master_popup_m extends CI_Model{
 	function carikwitansi($key){
-		$query = $this->db->query("SELECT 
+		$q_bak = "SELECT 
 						k.id_kwitansi,
 						k.no_kwitansi,
 						SUM(FTotalHargaInvByCustomer (kd.id_invoice)) AS total
@@ -13,7 +13,66 @@ class master_popup_m extends CI_Model{
 					ordersuratjalan os ON inv.id_surat_jalan=os.id_surat_jalan LEFT JOIN
 					(SELECT * FROM mastercustomer WHERE id_customer=$key) mc ON mc.id_customer=k.id_customer
 					WHERE mc.nama IS NOT NULL
-					GROUP BY k.id_kwitansi");
+					GROUP BY k.id_kwitansi";
+		$q = "SELECT
+					hutang.no_kwitansi,
+					hutang.id_kwitansi,
+					hutang.hutang AS total
+				FROM
+				(SELECT
+					pembayaran.id_customer,
+					pembayaran.no_kwitansi,
+					pembayaran.id_kwitansi,
+					pembayaran.total_by_kwitansi,
+					pembayaran.piutang_lunas,
+					(pembayaran.total_by_kwitansi-pembayaran.piutang_lunas) AS hutang
+				FROM
+				(SELECT
+					kwitansi.id_customer,
+					kwitansi.no_kwitansi,
+					kwitansi.id_kwitansi,
+					kwitansi.total AS total_by_kwitansi,
+					CASE WHEN pembayaran.piutang_lunas IS NULL THEN 0 ELSE pembayaran.piutang_lunas END AS piutang_lunas
+				FROM
+				(SELECT
+					orderkwitansi.id_kwitansi,
+					orderkwitansi.no_kwitansi,
+					orderkwitansi.id_customer,
+					orderkwitansi_det.total
+				FROM
+					(SELECT * FROM orderkwitansi WHERE id_customer='$key') orderkwitansi
+				LEFT JOIN (
+					SELECT
+						*, SUM(subtotal) AS total
+					FROM
+						orderkwitansi_det
+					GROUP BY
+						id_kwitansi
+				) orderkwitansi_det ON orderkwitansi.id_kwitansi = orderkwitansi_det.id_kwitansi)kwitansi
+				LEFT JOIN
+				(SELECT
+					jurnal.id_customer,
+					jurnal.id_transaksi,
+					kredit.id_rek,
+					SUM(kredit.jumlah) AS piutang_lunas
+				FROM
+				(SELECT * FROM jurnal WHERE id_jenis_jurnal='1' AND id_customer=2)jurnal
+				LEFT JOIN
+				(SELECT
+					kredit_d.id_kredit_h,
+					kredit_d.id_kredit_d,
+					kredit_d.id_rek,
+					kredit_d.jumlah,
+					kredit_d.keterangan
+				FROM
+				(SELECT * FROM kredit_d WHERE id_rek='010201')kredit_d
+				LEFT JOIN kredit_h ON kredit_d.id_kredit_h=kredit_h.id_kredit_h)kredit
+				ON jurnal.id_kredit_h=kredit.id_kredit_h
+				GROUP BY jurnal.id_transaksi)pembayaran
+				ON kwitansi.id_kwitansi=pembayaran.id_transaksi)pembayaran
+				)hutang
+				WHERE hutang.hutang > 0";
+		$query = $this->db->query($q);
 		return $query->result();
 	}
 	function caricustomerpembayaran($key,$filter){
@@ -24,17 +83,93 @@ class master_popup_m extends CI_Model{
 		}else{
 			$where = "";
 		}
-		
-		$query = $this->db->query("SELECT
-													od.id_kwitansi,
-													od.id_customer,
-													mc.nama,
-													mc.kode_customer,
-													mc.inisial
-												FROM
-												(SELECT * FROM orderkwitansi WHERE id_kwitansi NOT IN(SELECT id_kwitansi FROM bayarpiutang_det) GROUP BY id_customer) od LEFT JOIN
-												(SELECT * FROM mastercustomer $where) mc ON od.id_customer=mc.id_customer
-												WHERE mc.nama IS NOT NULL");
+		$q_bak = "SELECT
+					od.id_kwitansi,
+					od.id_customer,
+					mc.nama,
+					mc.kode_customer,
+					mc.inisial
+				FROM
+				(SELECT * FROM orderkwitansi WHERE id_kwitansi NOT IN(SELECT id_kwitansi FROM bayarpiutang_det) GROUP BY id_customer) od LEFT JOIN
+				(SELECT * FROM mastercustomer $where) mc ON od.id_customer=mc.id_customer
+				WHERE mc.nama IS NOT NULL";
+		$q ="SELECT
+					pembayaran_piutang.id_customer,
+					mastercustomer.nama,
+					mastercustomer.kode_customer,
+					mastercustomer.inisial
+				FROM
+					(
+						SELECT
+							kwitansi.id_customer,
+							CASE
+						WHEN pembayaran.piutang_lunas >= kwitansi.piutang THEN
+							0
+						ELSE
+							1
+						END AS status_piutang
+						FROM
+							(
+								SELECT
+									jurnal.id_customer,
+									kredit.id_rek,
+									SUM(kredit.jumlah) AS piutang_lunas
+								FROM
+									(
+										SELECT
+											*
+										FROM
+											jurnal
+										WHERE
+											id_jenis_jurnal = '1'
+									) jurnal
+								LEFT JOIN (
+									SELECT
+										kredit_d.id_kredit_h,
+										kredit_d.id_kredit_d,
+										kredit_d.id_rek,
+										kredit_d.jumlah,
+										kredit_d.keterangan
+									FROM
+										(
+											SELECT
+												*
+											FROM
+												kredit_d
+											WHERE
+												id_rek = '010201'
+										) kredit_d
+									LEFT JOIN kredit_h ON kredit_d.id_kredit_h = kredit_h.id_kredit_h
+								) kredit ON jurnal.id_kredit_h = kredit.id_kredit_h
+								GROUP BY
+									jurnal.id_customer
+							) pembayaran RIGHT JOIN
+							(
+								SELECT
+									orderkwitansi.id_customer,
+									SUM(orderkwitansi_det.total) piutang
+								FROM
+									(SELECT * FROM orderkwitansi) orderkwitansi
+								LEFT JOIN (
+									SELECT
+										*, SUM(subtotal) AS total
+									FROM
+										orderkwitansi_det
+									GROUP BY
+										id_kwitansi
+								) orderkwitansi_det ON orderkwitansi.id_kwitansi = orderkwitansi_det.id_kwitansi
+								GROUP BY
+									orderkwitansi.id_customer
+							) kwitansi
+						ON
+							pembayaran.id_customer = kwitansi.id_customer
+					) pembayaran_piutang
+				LEFT JOIN (SELECT * FROM mastercustomer) mastercustomer ON pembayaran_piutang.id_customer = mastercustomer.id_customer
+				WHERE
+					pembayaran_piutang.status_piutang = 1
+				AND mastercustomer.nama IS NOT NULL";
+		//echo $q;
+		$query = $this->db->query($q);
 		return $query->result();
 	}
 	function caricustomer($key,$filter){
@@ -127,9 +262,18 @@ class master_popup_m extends CI_Model{
 						b.telpon,
 						b.inisial
 					FROM
-					(SELECT id_customer FROM orderinvoice GROUP BY id_customer)a LEFT JOIN
+					(
+						SELECT 
+							id_customer 
+						FROM orderinvoice 
+							WHERE
+								id_invoice NOT IN(SELECT id_invoice FROM orderkwitansi_det) 
+						GROUP BY 
+							id_customer
+					)a LEFT JOIN
 					(SELECT * FROM mastercustomer $where) b ON a.id_customer=b.id_customer
 					WHERE b.kode_customer IS NOT NULL";
+		//echo $q;
 		$query = $this->db->query($q);
 		return $query->result();
 	}

@@ -3,7 +3,7 @@
 Class penjualan_lapfp extends CI_Controller{
 	function __construct() {
 		parent::__construct();
-		$this->load->model(array('penjualan_lapfakturpajak_m','penjualan_fp_m'));
+		$this->load->model(array('penjualan_lapfakturpajak_m','penjualan_fp_m','gp_m'));
     }
 	
 	public function index()

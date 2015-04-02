@@ -15,7 +15,7 @@
 						<a href="#modal_default_2" data-toggle="modal" class="addmaster btn btn-primary" data-direction="<?=base_url('master_perkiraan/addmodal')?>" data-wd="700px" data-original-title="Tambah Tanda Tangan" data-href="<?=base_url('master_perkiraan/tambah')?>">
 							<i class="icon-plus-sign-alt"></i>&nbsp;&nbsp;tambah
 						</a>
-						<a href="#modal_default_2" data-toggle="modal" class="editmaster btn btn-primary" data-direction="<?=base_url('master_perkiraan/editmodal')?>" data-wd="700px" data-original-title="Tambah Tanda Tangan" data-href="<?=base_url('master_perkiraan/edit')?>">
+						<a href="#modal_default_2" data-toggle="modal" class="editmaster btn btn-primary" data-direction="<?=base_url('master_perkiraan/editmodal')?>" data-wd="700px" data-original-title="Tambah Tanda Tangan" data-href="<?=base_url('master_perkiraan/update')?>">
 							<i class="icon-plus-sign-alt"></i>&nbsp;&nbsp;Edit
 						</a>
 					</div>

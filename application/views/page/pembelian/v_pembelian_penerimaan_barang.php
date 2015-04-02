@@ -22,7 +22,7 @@ $("#btn_cari_barang").click(function(){
 	if($("#id_pemesanan_h").val()==""){
 		noty({text: '<b>Harap Isi Data Pemesanan Barang Terlebih Dahulu.</b>', type: 'error',timeout:2000});
 	}else{
-		var vurl = "http://localhost/erp_tamansri/master_popup/cari_barang?id_pemesanan="+$("#id_pemesanan_h").val()+"&id_suplier="+$("#id_suplier").val();
+		var vurl = "http://localhost/erp_tamansri/pembelian_penerimaan_barang/cari_barang?id_pemesanan="+$("#id_pemesanan_h").val()+"&id_suplier="+$("#id_suplier").val();
 		//var vurl = "http://localhost/erp_tamansri/index.php?c=master_popup&m=cari_barang&id_pemesanan="+$("#id_pemesanan").val();
 		window.open(vurl,'popuppage','width=700,toolbar=0,resizable=1,scrollbars=yes,height=500,top=100,left=100,address=0');
 	}
@@ -37,23 +37,61 @@ $("#btn_cari_barang").click(function(){
 		var id_pemesanan_d = $("input[name=id_pemesanan_d]").val();
 		var id_barang = $("input[name=id_barang]").val();
 		var kuantias_barang = $("input[name=kuantitas_barang]").val();
+		var qty_barang = $("input[name=qty_barang]").val();
 		var keterangan = $("input[name=keterangan]").val();
 		//alert(nopol);
-		var parsing = {id_pemesanan_h:id_pemesanan_h, no_surat_jalan:no_surat_jalan, nopol:nopol, jam:jam, id_pemesanan_d:id_pemesanan_d, id_barang:id_barang, kuantitas_barang:kuantias_barang, keterangan:keterangan};
+		var parsing = {id_pemesanan_h:id_pemesanan_h, no_surat_jalan:no_surat_jalan, nopol:nopol, jam:jam, id_pemesanan_d:id_pemesanan_d, id_barang:id_barang, kuantitas_barang:kuantias_barang, qty_barang:qty_barang, keterangan:keterangan};
 		$.ajax({
 			type: "POST",
 			dataType: "json",
 			url : vurl,
 			data: parsing,
 			success: function(response){
-				//alert(response.vtabel);
+				//alert(response.dokumen);
 				$("#tabel .block .content").html(response.vtabel);
 				//$("#tabel .block .header").html(response.dokumen);
+				noty({text: '<b>Data Berhasil di tambahkan.</b>', type: 'success',timeout:2000});
+				$("input[name=kuantitas_barang]").val("");
+				$("input[name=kd_barang]").val("");
+				$("input[name=nama_barang]").val("");
+				$("#kuantitas_barang").val("");
 				$(".js").html(response.js);
+			},
+			error: function(response){
+				noty({text: '<b>Cek Kembali data - data yang anda masukkan.</b>', type: 'error',timeout:3000});
 			}
 		});
 	});
-	
+
+//tadfasfasfd
+		$(document).ready(function(){
+			$(".edit-penerimaan-barang").click(function(){
+				var vurl=$(this).attr('data-url');
+				var id_pemesanan_h=$(this).attr('id-pemesanan-h');
+				var id_penerimaan_h=$(this).attr('id-penerimaan-h');
+				var id_penerimaan_d=$(this).attr('id-penerimaan-d');
+				
+				//alert(vurl+id_pemesanan_h+id_penerimaan_h+id_penerimaan_d);
+				var parsing = {id_pemesanan_h:id_pemesanan_h, id_penerimaan_h:id_penerimaan_h, id_penerimaan_d:id_penerimaan_d };
+				$.ajax({
+					type: "post",
+					url: vurl,
+					dataType: "json",
+					data:parsing,
+					success: function(response) {
+					//alert(response.dokumen);
+					noty({text: '<b>Data Penerimaan Berhasil Di Hapus.</b>', type: 'success',timeout:3000});
+						$("#tabel .block .content").html(response.vtabel);
+						$(".js").html(response.js);
+					}
+				});
+			});
+		});
+			$(".simpan_penerimaan").click(function(){
+				var vurl = $(this).attr("data-url");
+				//alert("tsasdfas");
+				window.location.replace(vurl,'_blank');
+			});
 })
 </script>
 <?php
@@ -184,10 +222,11 @@ $atts = array(
 					</div>
 					<div class="col-md-1">Kuantitas</div>
 					<div class="col-md-1">
-							<?=form_input('kuantitas_barang','','class="form-control validate[required,qty[kuantitas_barang]]" id="qty_barang" onkeyup=""')?>
+							<?=form_input('kuantitas_barang','','class="form-control validate[required,qty[kuantitas_barang]]"  onkeyup=""')?>
 					</div>
 					<div class="col-md-1">
 							<?=form_input('','','class="form-control" id="kuantitas_barang" readonly ')?>
+							<input type="hidden" name="qty_barang" id="qty_barang">
 					</div>
 				</div>
 			</div>
@@ -213,7 +252,7 @@ $atts = array(
 				<h2>Detail Pemesanan Barang</h2>
 			</div>
 			<div class="content detail-pemesanan">
-				
+				<?=$data['vtabel']?>
 			</div>
 		</div>
 	</div>

@@ -18,7 +18,8 @@
 						data: {id_surat_jalan:id_surat_jalan},
 						success: function(response){
 							$("#subtotal").val(response.subtotal);
-							$("#total_harga").val(response.subtotal);
+							$("#ppn").val(response.ppn);
+							$("#total_harga").val(response.total_harga);
 							$("tbody").html("");
 							$("tbody").append(response.vtabel);
 							//$("#tabel_detail_invoice tbody").html(response.vtabel);
@@ -106,13 +107,14 @@
 				var tanggal = $("#tanggal").val();
 				var id_customer = $("#id_customer").val();
 				var subtotal = $("#subtotal").val();
-				var ppn = $("#pengiriman").val();
+				var ppn = $("#ppn").val();
 				var total = $("#total_harga").val();
+				var no_dokumen = $("#no_dokumen").val();
 				$.ajax({
 					type: "POST",
 					dataType: "json",
 					url : "<?=base_url('penjualan_invoice/simpan')?>",
-					data: {nourut:nourut,id_ttd:id_ttd,no_invoice:no_invoice,id_surat_jalan:id_surat_jalan,id_order:id_order,tanggal:tanggal,id_customer:id_customer,subtotal:subtotal,ppn:ppn,total:total},
+					data: {nourut:nourut,id_ttd:id_ttd,no_invoice:no_invoice,id_surat_jalan:id_surat_jalan,id_order:id_order,tanggal:tanggal,id_customer:id_customer,subtotal:subtotal,ppn:ppn,total:total,no_dokumen:no_dokumen},
 					success: function(response){
 						if(response.status=='sukses'){
 							$("#id_cetak").val(response.id_cetak);
@@ -191,7 +193,7 @@
 	
 	<div class="col-md-9">
 		<div class="block block-fill-white">
-			<input type="text" name="nourut" id="nourut">
+			<input type="hidden" name="nourut" id="nourut">
 			<input type="hidden" name="id_ttd" id="id_ttd">
 			<input type="hidden" name="id_cetak" id="id_cetak">
 			<input type="hidden" name="id_surat_jalan" id="id_surat_jalan" value="">
@@ -263,12 +265,12 @@
 				
 				<div class="form-row">
 					<div class="col-md-4">Pajak PPN :</div>
-					<div class="col-md-7"><?=form_input('pengiriman','0','class="form-control" id="pengiriman"')?></div>
+					<div class="col-md-7"><?=form_input('ppn','0','class="form-control" id="ppn"')?></div>
 				</div>
 				
 				<div class="form-row">
 					<div class="col-md-4">Grand Total:</div>
-					<div class="col-md-7"><?=form_input('total_harga','','class="form-control" id="total_harga" readonly="readonly" ')?></div>
+					<div class="col-md-7"><?=form_input('total','','class="form-control" id="total_harga" readonly="readonly" ')?></div>
 				</div>
 			</div>
 		</div>

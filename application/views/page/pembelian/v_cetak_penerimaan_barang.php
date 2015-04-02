@@ -43,6 +43,7 @@
 
 				.logo h1 {
 					font-size: 1.4rem;
+					margin-right: 15px;
 				}
 
 				.logo p {
@@ -55,6 +56,7 @@
 				position: absolute;
 				right: 20px;
 				text-align: center;
+				margin-top: 15px
 			}
 
 				.kepadayth p {
@@ -69,7 +71,7 @@
 				.kepadayth p:first-child {
 					border-bottom: 2px dotted #111;
 				}
-
+/*
 				.kepadayth p:nth-child(3), .kepadayth p:nth-child(4) {
 					width: 100%;
 					display: block;
@@ -83,7 +85,7 @@
 					border-bottom: 2px double #111;
 					margin-bottom: 5px;
 					text-align: left;
-				}
+				}*/
 
 			.judulheader {
 				width: 100%;
@@ -181,7 +183,7 @@
 				width: 400px;
 				font-size: 0.8rem;
 				margin: 10px;
-				margin-top: 80px;
+				margin-top: 150px;
 			}
 
 				.catatankiribawah p:first-child {
@@ -237,135 +239,122 @@
 		<section class="header">
 			<div class="logo">
 				<img src="<?=base_url()?>img/ts-logo.jpg">
-				<h1><?=$perusahaan->nama?></h1>
-				<p><?=$perusahaan->alamat?> <?=$perusahaan->notelp?> <?=$perusahaan->fax?></p>
-				<p>NPWP : <?=$perusahaan->npwp?></p>
-				<p>PENGUKUHAN PKP : <?=$perusahaan->npwp?></p>
+				<h1>PT. TAMAN SRIWEDARI</h1>
+				<p>KEDIRI - INDONESIA</p>
 			</div>
 			<div class="kepadayth">
-				<p><?=$this->gp_m->RubahTanggal(date('d-m-Y',strtotime($tampilpenerima->tanggal_pemesanan)))?></p>
-				<p>KEPADA YTH.</p>
-				<p><?=$tampilpenerima->nama?></p>
-				<p>&nbsp;</p>
 				<p>&nbsp;</p>
 			</div>
 			<div class="judulheader">
-				<h1>SURAT PESANAN BARANG</h1>
-				<p>No. <?=$this->createnosurat->convertnosurat($this->uri->segment("3"),'SP')?></p>
+				<h1>LAPORAN PENERIMAAN BARANG</h1>
+				<p>No. <?=$this->createnosurat->convertnosurat($this->uri->segment("3"),'SPN')?></p></p>
 			</div>
-			<p>Bersama ini kami ingin memesan barang - barang dengan spesifikasi sbb :</p>
+			<p>Telah di terima dari <?=$nama_suplier?> dengan kendaraan No. Pol <?=$no_pol?> pada jam <?=$jam?> WIB barang - barang sebgai berikut : </p>
 		</section>
 		<section class="tabel">
 			<table>
 				<tr>
 					<th rowspan=2>No.</th>
-					<th rowspan=2>JENIS BARANG</th>
+					<th rowspan=2>NAMA BARANG</th>
 					<th rowspan=2>KUANTITAS</th>
-					<th rowspan=2>SATUAN BARANG</th>
-					<th colspan=2>HARGA / Rp.</th>
+					<th rowspan=2>SATUAN</th>
+					<th rowspan=2>KETERANGAN.</th>
 				</tr>
 				<tr>
-					<th>HARGA SATUAN</th>
-					<th>TOTAL</th>
 				</tr>
 				<tr>
 					<td>
 					<?php 
 					$no=1;
-					foreach($listpemesanancetak as $val){
+					foreach($listBarang as $val){
 						echo $no."<br>";
 						$no++;
 					}
 					?></td>
 					<td>
 					<?php 
-					foreach($listpemesanancetak as $val){
+					foreach($listBarang as $val){
 						echo $val->nama_barang."<br>";
 					}
 					?>
 					</td>
 					<td>
 					<?php 
-					foreach($listpemesanancetak as $val){
+					foreach($listBarang as $val){
 						echo $val->kuantitas."<br>";
 					}
 					?>
 					</td>
 					<td>
 					<?php 
-					foreach($listpemesanancetak as $val){
-						echo $val->satuan."<br>";
+					foreach($listBarang as $val){
+						$satuan = $this->db->get_where('pembelian_pemesanan_d',array('id_barang'=>$val->id_barang))->row();
+						echo $satuan->satuan."<br>";
 					}
 					?>
 					</td>
 					<td>
 					<?php 
-					foreach($listpemesanancetak as $val){
-						echo $this->gp_m->Rupiah($val->harga)."<br>";
+					foreach($listBarang as $val){
+						echo $val->keterangan."<br>";
 					}
 					?>
 					</td>
-					<td>
-					<?php 
-					$total_harga=0;
-					foreach($listpemesanancetak as $val){
-						$total_harga=$total_harga+($val->harga*$val->kuantitas);
-						echo $this->gp_m->Rupiah($val->harga*$val->kuantitas)."<br>";
-					}
-					?>
-					</td>
-				</tr>
-				<tr>
-					<td colspan=5>JUMLAH TOTAL Rp.</td>
-					<td><?=$this->gp_m->Rupiah($total_harga)?></td>
 				</tr>
 			</table>
 		</section>
 		<section class="footer">
-			<table>
-				<tr>
-					<td>Alamat penerima</td>
-					<td>:</td>
-					<td><p><?=$tampilpenerima->alamat?></p></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td><p>&nbsp;</p></td>
-				</tr>
-				<tr>
-					<td>Tanggal pengiriman</td>
-					<td>:</td>
-					<td><p><?=date('d-m-Y',strtotime($tampilpenerima->tanggal_pengiriman))?></p></td>
-				</tr>
-				<tr>
-					<td>Syarat pengiriman</td>
-					<td>:</td>
-					<td><p><?=$tampilpenerima->syarat_pembayaran?></p></td>
-				</tr>
-				<tr>
-					<td>Keterangan</td>
-					<td>:</td>
-					<td><p><?=$tampilpenerima->keterangan?></p></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td><p>&nbsp;</p></td>
-				</tr>
-			</table>
-			<div class="catatankiribawah">
-				<p>Catatan :</p>
-				<p>Harap cantumkan Nomor & Tanggal PO ini pada setiap surat jalan atau tagihan</p>
-			</div>
-			<div class="tandatangan">
-				<p>Hormat kami,</p>
-				<h4><?=$perusahaan->nama?></h4>
+			<table style="width: auto">
+			<th>
+				<p>Deterima,</p>
+				<h4>jtafkajskld</h4>
 				<div class="kurung">
 					<span>(</span>
-					<p><?=$tampilpenerima->nama_ttd?></p>
+					<p>asdf</p>
 					<span>)</span>
 				</div>
+			</th>
+			<th>
+				<p>Deterima,</p>
+				<h4>jtafkajskld</h4>
+				<div class="kurung">
+					<span>(</span>
+					<p>asdf</p>
+					<span>)</span>
+				</div>
+			</th>
+			<th>
+				<p>Deterima,</p>
+				<h4>jtafkajskld</h4>
+				<div class="kurung">
+					<span>(</span>
+					<p>asdf</p>
+					<span>)</span>
+				</div>
+			</th>
+			<th>
+				<p>Deterima,</p>
+				<h4>jtafkajskld</h4>
+				<div class="kurung">
+					<span>(</span>
+					<p>asdf</p>
+					<span>)</span>
+				</div>
+			</th>
+		</table>
+			<div class="catatankiribawah">
+				<p>Catatan :</p>
+				<p>Laporan penerimaan barang ini, harus dilampiri dengan copy surat jalan dari supplier</p>
+			</div>
+			<div class="tandatangan">
+				<p>Deterima,</p>
+				<h4>jtafkajskld</h4>
+				<div class="kurung">
+					<span>(</span>
+					<p>asdf</p>
+					<span>)</span>
+				</div>
+
 			</div>
 		</section>
 	</div>

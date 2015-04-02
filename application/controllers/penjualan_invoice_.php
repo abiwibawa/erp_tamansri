@@ -13,8 +13,9 @@ Class penjualan_invoice extends CI_Controller{
 	}
 	
 	function simpan(){
+		$key=md5(rand(8888,999999));
 		if($this->penjualan_invoice_m->ceksuratjalan($this->input->post('id_surat_jalan'))){
-			$simpan = array(	"no_invoice"=>$this->input->post('no_invoice'),
+			$simpan = array("no_invoice"=>$this->input->post('no_invoice'),
 								"id_surat_jalan"=>$this->input->post('id_surat_jalan'),
 								"id_order"=>$this->input->post('id_order'),
 								"tanggal"=>date('Y-m-d',strtotime($this->input->post('tanggal'))),
@@ -24,10 +25,8 @@ Class penjualan_invoice extends CI_Controller{
 								"total"=>$this->input->post('total'),
 								"id_ttd"=>$this->input->post('id_ttd')
 								);
-			$id_cetak=$this->penjualan_invoice_m->simpaninvoice($simpan);	
+			$id_cetak=$this->penjualan_invoice_m->simpaninvoice($simpan);
 			//simpan to jurnal, debet n kredit
-			$no_sj = $this->input->post('no_dokumen');
-			$key=md5(rand(8888,999999));
 			$tanggal['tanggal'] = date('Y-m-d',strtotime($this->input->post('tanggal')));
 			$save_debet_h['key'] = $key;
 			$save_debet_h = $save_debet_h+$tanggal;
@@ -39,7 +38,7 @@ Class penjualan_invoice extends CI_Controller{
 			$save_deb_d = array('id_debit_h'=>$debit_h['id_debit_h'],
 											'jumlah'=>$this->input->post('total'),
 											'id_rek'=>'010201',
-											'keterangan'=>'Piutang Surat Jalan No '.$no_sj
+											'keterangan'=>'Piutang Surat Jalan No '.$this->input->post('no_dokumen')
 											);
 			$this->simpan->SimpanMaster('debit_d',$save_deb_d);
 			
@@ -48,13 +47,13 @@ Class penjualan_invoice extends CI_Controller{
 			$save_kredit_d['id_kredit_h'] = $kredit_h['id_kredit_h'];
 			$save_kredit_d['jumlah'] = $this->input->post('subtotal');
 			$save_kredit_d['id_rek'] = '010401';
-			$save_kredit_d['keterangan'] = 'Penjualan Surat Jalan No '.$no_sj;
+			$save_kredit_d['keterangan'] = 'Penjualan Surat Jalan No '.$this->input->post('no_dokumen');
 			$this->simpan->SimpanMaster('kredit_d',$save_kredit_d);
 			
 			$save_kredit_d['id_kredit_h'] = $kredit_h['id_kredit_h'];
 			$save_kredit_d['jumlah'] = $this->input->post('ppn');
 			$save_kredit_d['id_rek'] = '010504';
-			$save_kredit_d['keterangan'] = 'PPN Surat Jalan No '.$no_sj;
+			$save_kredit_d['keterangan'] = 'PPN Surat Jalan No '.$this->input->post('no_dokumen');
 			$this->simpan->SimpanMaster('kredit_d',$save_kredit_d);
 			
 			$save_jurnal = array('id_transaksi'=>$id_cetak,
@@ -62,7 +61,7 @@ Class penjualan_invoice extends CI_Controller{
 										   'id_kredit_h'=>$kredit_h['id_kredit_h'],
 										   'tanggal'=>date('Y-m-d',strtotime($this->input->post('tanggal'))),
 										   'id_customer'=>$this->input->post('id_customer'),
-										   'no_dokumen'=>$no_sj,
+										   'no_dokumen'=>$this->input->post('no_dokumen'),
 										   'id_jenis_jurnal'=>'5'
 										);
 			$this->simpan->SimpanMaster('jurnal',$save_jurnal);

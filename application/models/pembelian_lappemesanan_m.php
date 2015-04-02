@@ -19,7 +19,7 @@ class pembelian_lappemesanan_m extends CI_Model{
 			}
 		}
 		$q = $this->db->query("select * from 
-			(select id_pemesanan_h,id_suplier,DATE_FORMAT(tanggal_pemesanan,'%Y-%m-%d')tanggal_pemesanan,DATE_FORMAT(tanggal_pengiriman,'%Y-%m-%d')tanggal_pengiriman from pembelian_pemesanan_h $where2)a
+			(select id_pemesanan_h,id_suplier,DATE_FORMAT(tanggal_pemesanan,'%d-%m-%Y')tanggal_pemesanan,DATE_FORMAT(tanggal_pengiriman,'%d-%m-%Y')tanggal_pengiriman from pembelian_pemesanan_h $where2)a
 			left join 
 			(select id_suplier,kode_suplier,nama,alamat,kota from mastersuplier)b
 			on 

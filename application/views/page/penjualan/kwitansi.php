@@ -32,21 +32,24 @@
 				position: absolute;
 				left: 10px;
 				top: 5px;
+				width: 70%;
 			}
 
 			.ataskiri h1 {
 				font-size: 2.5rem;
 				font-family: Edwardian Script ITC;
+				float:left;
 			}
 
 			.ataskiri h4 {
 				font-weight: 400;
 				font-size: small;
+				float:left;
 			}
 
 			.ataskanan {
 				position: absolute;
-				right: 130px;
+				right: 10px;
 				top: 10px;
 			}
 
@@ -198,6 +201,7 @@
 <div class="container">
 	<header>
 		<div class="ataskiri">
+			<h1><img src="<?=base_url()?>img/ts-logo.jpg"></h1>
 			<h1>PT. Taman Sriwedari</h1>
 			<h4>JL. SERSAN KKO USMAN NO. 27.DS. DANDANGAN, KEC GAMPENG, KAB KEDIRI</h4>
 		</div>

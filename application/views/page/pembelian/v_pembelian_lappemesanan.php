@@ -21,8 +21,28 @@ function changefilter(){
 		$(".c2").css("display","");
 	}
 }
+$(function() { 
+	$(".detil_laporan_pembelian").click(function(){
+		var id_pemesanan_h = $(this).attr("id_pemesanan_h");
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url : "<?=base_url('pembelian_lappemesanan/listdetail')?>",
+			data: {id_pemesanan_h:id_pemesanan_h},
+			success: function(response){
+				$("#modal_default_3").modal("show");
+				$("#modal_default_3 .modal-header .modal-title").html("Detail Laporan Pemesanan : "+response.no_pemesanan);
+				$("#modal_default_3 .modal-body").html(response.vtabel);
+			}
+		});
+	});
 
-
+	$(".edit").click(function(){
+		$("#id_pemesanan_h").val($(this).attr("id_pemesanan_h"));
+		$("#form_edit").submit();
+	});
+	
+});
 </script>
 <div class="row">                
 	<div class="col-md-12">
@@ -80,15 +100,15 @@ function changefilter(){
 				<h4>Daftar Laporan Pemesanan</h4>
 			</div>
 			<div class="content">
-				<table cellpadding="0" cellspacing="0" width="100%" class="table table-bordered table-striped sortable">
+				<table cellpadding="0" cellspacing="0" width="100%" class="table table-bordered table-striped ">
 				<thead>
 					<tr>
-						<th width="5%">No</th>
-						<th width="5%">Nama</th>
-						<th width="5%">Kode Suplier</th>
-						<th width="5%">Tanggal Pemesanan</th>
-						<th width="5%">Tanggal Pengiriman</th>
-						<th width="5%" colspan="3">Aksi</th>                              
+						<th width="2%">No</th>
+						<th width="20%">Nama</th>
+						<th width="15%">Kode Suplier</th>
+						<th width="10%">Tanggal Pemesanan</th>
+						<th width="10%">Tanggal Pengiriman</th>
+						<th width="3%" colspan="3"><div align="center">Aksi</div></th>                              
 					</tr>
 				</thead>
 				<tbody>
@@ -100,13 +120,23 @@ function changefilter(){
 						<td><?=$row['tanggal_pemesanan']?></td>
 						<td><?=$row['tanggal_pengiriman']?></td>
 						<td align="center">
+							<button type="button" class="btn btn-primary tip detil_laporan_pembelian" title data-original-title="Lihat Detail Laporan Pemesanan" id_pemesanan_h="<?=$row['id_pemesanan_h']?>"><i class="icon-zoom-in"></i>&nbsp;&nbsp;detail</button>
+						</td>
+						<td align="center">
 							<a class="btn btn-danger tip" title data-original-title="Cetak Laporan Pemesanan"  href="<?=base_url('pembelian_pemesanan/cetak/'.$row['id_pemesanan_h'])?>" target="_blank"><i class="icon-print"></i>&nbsp;&nbsp;cetak</a>
 						</td>
+						<td align="center">
+							<button class="btn btn-success tip edit" title data-original-title="Edit Laporan Pemesanan" id_pemesanan_h="<?=$row['id_pemesanan_h']?>"><i class="icon-pencil"></i>&nbsp;&nbsp;edit</button>
+						</td>					
 					</tr>
 				<?php $no++;} ?>
 				</tbody>
 				</table>
 			</div>
 		</div>
+		
+		<form id="form_edit" method="POST" action="<?=base_url('pembelian_pemesanan/edit')?>">
+			<input type="hidden" name="id_pemesanan_h" id="id_pemesanan_h">
+		</form>
 	</div>
 </div>

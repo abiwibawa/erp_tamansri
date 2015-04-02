@@ -70,8 +70,9 @@ Class Penjualan_invoice_m extends CI_Model{
 		}else{
 			$tabel .= "<tr><td colspan='6'>Tidak Ditemukan Transaksi Barang</td></tr>";
 		}
-		
-		return array('subtotal'=>$total,'vtabel'=>$tabel);
+		$ppn = $total*0.10;
+		$total_harga = $total+$ppn;
+		return array('subtotal'=>$total,'ppn'=>$ppn,'total_harga'=>$total_harga,'vtabel'=>$tabel);
 	}
 	
 	function detailinvoice2($id_surat_jalan){

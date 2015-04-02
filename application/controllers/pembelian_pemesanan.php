@@ -17,13 +17,20 @@ Class pembelian_pemesanan extends CI_Controller{
 	
 	public function edit()
 	{
+		$id_pemesanan_h=$this->input->post('id_pemesanan_h');
 		$data['action_form'] = '';
+		$data['id_pemesanan_h']=$id_pemesanan_h;
+		
+		$data['tampilpenerima']=$this->pembelian_pemesanan_m->tampilpenerima($id_pemesanan_h);
+
+		
 		$data['page'] = 'pembelian/v_pembelian_pemesanan_edit';
 		$this->load->view('template/index',$data);
 	}
 	
 	function listorderdetailedit(){
-		echo json_encode($this->pembelian_pemesanan_m->listorderdetail($this->uri->segment(3)));
+		$id_pemesanan_h=$this->input->post('id_pemesanan_h');
+		echo json_encode($this->pembelian_pemesanan_m->listorderdetail($id_pemesanan_h));
 	}
 	
 	function simpan(){

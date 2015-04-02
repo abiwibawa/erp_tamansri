@@ -10,6 +10,7 @@ $(function() {
 <thead>
 	<tr>
 		<th width="2%">No</th>
+		<th width="25%">No Surat Jalan</th>
 		<th width="25%">Nama Customer</th>
 		<th width="20%">Alamat</th>
 		<th width="20%">NPWP</th>
@@ -40,6 +41,7 @@ $(function() {
 		?>
 		<tr>
 			<td><?=$no?></td>
+			<td><a style="text-decoration:none;" onClick="sendValue(<?=$data?>)" ><?=$row->no_surat_jalan?></a></td>
 			<td><a style="text-decoration:none;" onClick="sendValue(<?=$data?>)" ><?=$row->nama?></a></td>
 			<td><a style="text-decoration:none;" onClick="sendValue(<?=$data?>)" ><?=$row->alamat?></a></td>
 			<td><a style="text-decoration:none;" onClick="sendValue(<?=$data?>)" ><?=$row->npwp?></a></td>

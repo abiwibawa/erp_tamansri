@@ -19,9 +19,19 @@ Class pembelian_penerimaan_barang extends CI_Controller{
 		$this->form_data->surat_jalan = '';
 		$this->form_data->nopol_kendaraan = '';
 		$this->form_data->jam = '12:12';
-		$data['data_master'] = array();
+		$data['data'] = $this->m_pembelian_penerimaan_barang->getAll(0,0);
 		$data['page']='pembelian/v_pembelian_penerimaan_barang';
 		$this->load->view('template/index',$data);
+	}
+
+	function cari_barang(){
+		//$data = array();
+		$id_pem = $this->input->get("id_pemesanan");
+		$id_sup = $this->input->get("id_suplier");
+		$data['list'] = $this->m_pembelian_penerimaan_barang->cari_barang_pemesanan($id_pem,$id_sup)->result();
+		$data['page'] = 'popup/cari_barang_pemesanan';
+		//echo $data['td'];
+		$this->load->view('popup/popup',$data);
 	}
 	
 	function simpan(){
@@ -40,7 +50,13 @@ Class pembelian_penerimaan_barang extends CI_Controller{
 					'no_pol'=> $this->input->post('nopol'),
 					'jam'=> $this->input->post('jam'),
 					);
-			$simpan_penerimaan_h = $this->simpan->SimpanMaster('pembelian_penerimaan_h',$value);
+			$cek = $this->db->get_where('pembelian_penerimaan_h', $value)->num_rows();
+			//$cek = $this->m_pembelian_penerimaan_barang->cek_tabel_penerimaan($value);
+			//$hasil['dokumen'] = $cek;
+			if ($cek != 1) {
+				$simpan_penerimaan_h = $this->simpan->SimpanMaster('pembelian_penerimaan_h',$value);
+			}
+
 			$this->db->select_max('id_penerimaan_h');
 			$query = $this->db->get('pembelian_penerimaan_h')->row();
 			//echo $query->id_penerimaan_h;
@@ -55,8 +71,8 @@ Class pembelian_penerimaan_barang extends CI_Controller{
 			$simpan_penerimaan_d = $this->simpan->SimpanMaster('pembelian_penerimaan_d',$value2);
 		}
 		//$hasil = $this->m_pembelian_penerimaan_barang->getAll(1);
-		$hasil = $this->m_pembelian_penerimaan_barang->getAll($this->input->post('id_pemesanan_h'));
-		$hasil['dokumen'] = $this->input->post('no_surat_jalan');
+		$hasil = $this->m_pembelian_penerimaan_barang->getAll($this->input->post('id_pemesanan_h'), $query->id_penerimaan_h);
+		//$hasil['dokumen'] = $tes;
 		$hasil['js'] = 
 		"<script>$(document).ready(function(){
 			$(\".edit-penerimaan-barang\").click(function(){
@@ -118,9 +134,9 @@ Class pembelian_penerimaan_barang extends CI_Controller{
 		$id_penerimaan_d = $this->input->post('id_penerimaan_d');
 		$id_penerimaan_h = $this->input->post('id_penerimaan_h');
 		$id_pemesanan_h = $this->input->post('id_pemesanan_h');
-		$this->m_pembelian_penerimaan_barang->hapus(array('id_penerimaan_h'=>$id_penerimaan_h), 'pembelian_penerimaan_h');
+		//$this->m_pembelian_penerimaan_barang->hapus(array('id_penerimaan_h'=>$id_penerimaan_h), 'pembelian_penerimaan_h');
 		$this->m_pembelian_penerimaan_barang->hapus(array('id_penerimaan_d'=>$id_penerimaan_d), 'pembelian_penerimaan_d');
-		$hasil = $this->m_pembelian_penerimaan_barang->getAll($id_pemesanan_h);
+		$hasil = $this->m_pembelian_penerimaan_barang->getAll($id_pemesanan_h, $id_penerimaan_h );
 		$hasil['dokumen'] = 'berhasil hapus'; 
 		$hasil['js'] = 
 		"<script>$(document).ready(function(){
