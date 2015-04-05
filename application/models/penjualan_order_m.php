@@ -16,12 +16,13 @@ class penjualan_order_m extends CI_Model{
 														od.satuan,
 														(od.kuantitas * od.harga) AS total
 													FROM
-														temp_order_det od
+														/*temp_order_det od*/
+														order_det od
 													LEFT JOIN masterbarang mb ON od.id_barang=mb.id_barang
 													WHERE
 														od.id_order = '$idorder'");
 		foreach($query->result() as $row){
-			$tabel .= "<tr><td>".$no."</td><td>".$row->kode_barang."/".$row->nama_barang."</td><td>".$row->kuantitas."</td><td>".$row->satuan."</td><td>".$row->harga."</td><td>".$row->total."</td><td><button type=\"button\"direction=".base_url('penjualan_order/hapus_item')." class=\"hapus_item btn btn-danger\" id=".$row->id_order_det.".".$row->id_order."><i class=\"icon-trash\"></i> &nbsp;hapus</button></td></tr>";
+			$tabel .= "<tr><td>".$no."</td><td>".$row->kode_barang."/".$row->nama_barang."</td><td>".$row->kuantitas."</td><td>".$row->satuan."</td><td>".$row->harga."</td><td>".$row->total."</td><td><button type=\"button\"direction=".base_url('penjualan_order_/hapus_item')." class=\"hapus_item btn btn-danger\" id=".$row->id_order_det.".".$row->id_order."><i class=\"icon-trash\"></i> &nbsp;hapus</button></td></tr>";
 			$no++;
 			$total = $total+$row->total;
 		}

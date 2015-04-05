@@ -22,8 +22,12 @@
 	<script type='text/javascript' src='<?=base_url()?>js/plugins/validationengine/languages/jquery.validationEngine-en.js'></script>
     <script type='text/javascript' src='<?=base_url()?>js/plugins/validationengine/jquery.validationEngine.js'></script>
     
+    <script type='text/javascript' src='<?=base_url()?>js/plugins/maskedinput/jquery.maskedinput.min.js'></script>    
+    <script type='text/javascript' src='<?=base_url()?>js/plugins/stepy/jquery.stepy.min.js'></script>    
+
     <script type='text/javascript' src='<?=base_url()?>js/plugins.js'></script>   
     <script type='text/javascript' src='<?=base_url()?>js/actions.js'></script>
+    <script type='text/javascript' src='<?=base_url()?>js/settings.js'></script>
 </head>
 <body class="bg-img-num1"> 
     <div class="container">        

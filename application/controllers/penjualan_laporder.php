@@ -47,20 +47,21 @@ Class penjualan_laporder extends CI_Controller{
 			$page=$this->input->get('page');
 			
 		$filter = $this->input->post('filter');
-		if($filter == "f1" || $filter == "f3"){
-			$unt_set = array('tanggal1_sess'=>'','tanggal2_sess'=>'');
-			$this->session->unset_userdata($unt_set);
-			
-			$set_sess = array('key_sess'=>$this->input->post('key'),'filter_sess'=>$filter);
-			$this->session->set_userdata($set_sess);
-		}else{
-			$array_items = array('key_sess'=>'');;
-			$this->session->unset_userdata($array_items);
-			
-			$set_sess = array('tanggal1_sess'=>$this->input->post('tanggal1'),'tanggal2_sess'=>$this->input->post('tanggal2'),'filter_sess'=>$filter);
-			$this->session->set_userdata($set_sess);
-		}
-		
+		if($_POST){
+			if($filter == "f1" || $filter == "f3"){
+				$unt_set = array('tanggal1_sess'=>'','tanggal2_sess'=>'');
+				$this->session->unset_userdata($unt_set);
+				
+				$set_sess = array('key_sess'=>$this->input->post('key'),'filter_sess'=>$filter);
+				$this->session->set_userdata($set_sess);
+			}else{
+				$array_items = array('key_sess'=>'');;
+				$this->session->unset_userdata($array_items);
+				
+				$set_sess = array('tanggal1_sess'=>$this->input->post('tanggal1'),'tanggal2_sess'=>$this->input->post('tanggal2'),'filter_sess'=>$filter);
+				$this->session->set_userdata($set_sess);
+			}
+		}		
 		if($this->session->userdata('key_sess')!="" || $this->session->userdata('tanggal1_sess')!="" || $this->session->userdata('tanggal2_sess')!=""){
 			$total_row=count($this->penjualan_laporder_m->data());
 			$url = current_url();
@@ -69,7 +70,7 @@ Class penjualan_laporder extends CI_Controller{
 			$data['paginator'] = $this->pagination->create_links();
 			//end pagination
 			
-			$data['data']=$this->penjualan_laporder_m->data($filter,$page,$config_page['per_page']);
+			$data['data']=$this->penjualan_laporder_m->data($this->session->userdata('filter_sess'),$page,$config_page['per_page']);
 		}else{
 			$data['data']=array();
 		}
@@ -110,7 +111,7 @@ Class penjualan_laporder extends CI_Controller{
 		$id_order = $this->input->post('id_order');
 		$sess_edit = array('id_order_edit_sess'=>$id_order);
 		$this->session->set_userdata($sess_edit);
-		$hasil['redir'] = base_url('penjualan_order/vedit');
+		$hasil['redir'] = base_url('penjualan_order_/vedit');
 		echo json_encode($hasil);
 	}
 	

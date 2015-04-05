@@ -85,6 +85,41 @@ $(".editmaster").click(function(){
 	});
 });
 
+function form_order(e){
+	var vurl = $(e).attr("action");
+	var data2 = $(e).serialize();
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		url : vurl,
+		data: data2,
+		success: function(response){
+			//alert(response.status);
+			$("#subtotal").val(response.subtotal);
+			$("#total_harga").val(response.subtotal);
+			$("#id_order").val(response.id_order);
+			
+			$('tbody').html('');
+			$('tbody').append(response.vtabel);
+			
+			$("#kode_barang").val('');
+			$("#id_barang").val('');
+			$("#nama_barang").val('');
+			$("#satuan").val('');
+			$("#kuantitas").val('');
+			$("#harga").val('');
+			$("#keterangan").val('');
+			
+			$(".hapus_item").click(function(){
+				var durl = $(this).attr("direction");
+				var id = $(this).attr("id");
+				
+				hapus_item(durl,id);
+			});
+		}
+	});
+}
+
 $("#form_order").on('submit',function(e){
 	var vurl = $(this).attr("action");
 	var data2 = $(this).serialize();
@@ -136,16 +171,14 @@ $(".modalcloseok").click(function(){
 $(".simpan_order").click(function(){
 	var vurl = $(this).attr("data-url");
 	var id_order = $("#id_order").val();
-	var pengiriman = $("#pengiriman").val();
-	var subtotal = $("#subtotal").val();
 	
 	$.ajax({
 		type: "POST",
 		dataType: "json",
 		url : vurl,
-		data: "pengiriman="+pengiriman+"&id_order="+id_order+"&subtotal="+subtotal,
+		data: "id_order="+id_order,
 		success: function(response){
-			window.location.replace(response.redir);
+			window.location.replace(response);
 		}
 	});
 });

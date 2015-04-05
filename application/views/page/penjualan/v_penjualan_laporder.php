@@ -76,11 +76,19 @@ function changefilter(){
 				<table cellpadding="0" cellspacing="0" width="100%" class="table table-bordered table-striped">
 				<thead>
 					<tr align="center" style="text-align:center">
-						<th width="5%">No</th>
+						<th rowspan="2" width="5%">No</th>
+						<th colspan="3">Header</th>
+						<th colspan="4">Detail</th>
+						<th rowspan="2" width="5%" colspan="2">Aksi</th>
+					</tr>
+					<tr align="center" style="text-align:center">
 						<th width="5%">Tanggal Order</th>
 						<th width="10%">No Dokumen</th>
 						<th width="5%">Kode Customer</th>
-						<th width="5%" colspan="2">Aksi</th>                              
+						<th width="5%">Kode/Nama Barang</th>
+						<th width="5%">Jumlah</th>
+						<th width="5%">Hrg/Item</th>
+						<th width="5%">Keterangan</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -90,8 +98,12 @@ function changefilter(){
 						<td><?=$row['tanggal']?></td>
 						<td><?=$row['no_dokumen']?></td>
 						<td><?=$row['kode_customer']?></td>
+						<td><?=$row['kode_brg']?></td>
+						<td><?=$row['kuantitas']?></td>
+						<td><?=$row['harga']?></td>
+						<td><?=$row['keterangan']?></td>
 						<td align="center">
-							<button type="button" class="btn btn-primary tip detil_order" title data-original-title="Lihat Detail Order" data-id="<?=$row['id_order']?>" data-url="<?=base_url('penjualan_laporder/showdetil')?>"><i class="icon-zoom-in"></i>&nbsp;&nbsp;detail</button>
+							<button type="button" class="btn btn-danger tip detil_order" title data-original-title="Lihat Detail Order" data-id="<?=$row['id_order']?>" data-url="<?=base_url('penjualan_laporder/showdetil')?>"><i class="icon-trash"></i>&nbsp;&nbsp;delete</button>
 						</td>
 						<td align="center">
 						<?php if($row['status_sj']==0) { ?>

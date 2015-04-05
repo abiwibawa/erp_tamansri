@@ -284,7 +284,17 @@
 				// !! ensures that an undefined return is interpreted as return false but allows a onValidationComplete() to possibly return true and have form continue processing
 				return !!options.onValidationComplete(form, r);
 			}
-			return r;
+			//return r;
+			//alert(r);
+			if(r){
+				var result = form.attr('result');
+				if(result=="po"){
+					form_order(form);
+				}
+				return false;
+			}else{
+				return r;
+			}
 		},
 		/**
 		* Return true if the ajax field validations passed so far

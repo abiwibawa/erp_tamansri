@@ -160,11 +160,8 @@ Class penjualan_order extends CI_Controller{
 		if($cek_order){ //jika id order ada
 			//update
 			$this->update->update2('order',array('subtotal'=>$subtotal,'total_harga'=>$total_harga,'status_edit'=>'0'),array('id_order'=>$id_order));// update order
-			
 			$this->hapus->HapusMaster2(array('id_order'=>$id_order),'temp_order'); //setelah disimpan ke tabel order, tabel temp_order di hapus
-			
 			$this->hapus->HapusMaster2(array('id_order'=>$id_order),'order_det'); //setelah disimpan ke tabel order, tabel temp_order di hapus
-			
 			$this->penjualan_order_m->simpan_detail($id_order);//simpan ke tabel order_det dari temp_order_det
 		}else{ //jika id order tidak ada
 			//insert
@@ -176,19 +173,16 @@ Class penjualan_order extends CI_Controller{
 			$header['status_edit'] = "0";
 			$this->simpan->SimpanMaster('order',$header); //simpan ke tabel order dari temp_order
 			$this->hapus->HapusMaster2(array('id_order'=>$id_order),'temp_order'); //setelah disimpan ke tabel order, tabel temp_order di hapus
-			
 			$this->penjualan_order_m->simpan_detail($id_order);//simpan ke tabel order_det dari temp_order_det
 		}
-		
 		$hasil = array('redir'=>base_url('penjualan_order'));
 		echo json_encode($hasil);
 	}
 	
 	//coding ini ke bawah untuk proses edit
-	function vedit(){		
+	function vedit(){
 		$id_order = $this->session->userdata('id_order_edit_sess');
 		$header = $this->penjualan_order_m->get_header($id_order);
-		
 		$this->form_data->id_order = $id_order;
 		$this->form_data->no_dokumen = $header[0]->no_dokumen;
 		$this->form_data->tanggal = $header[0]->tanggal;
@@ -203,10 +197,8 @@ Class penjualan_order extends CI_Controller{
 		$this->form_data->alamat_customer = $header[0]->alamat;
 		$this->form_data->telp_customer = $header[0]->telpon;
 		$this->form_data->kota_customer = $header[0]->kota;
-		
 		$this->hapus->HapusMaster2(array('id_order'=>$id_order),'temp_order_det'); //setelah disimpan ke tabel order, tabel temp_order di hapus
 		$this->penjualan_order_m->simpan_detail_ketemp($id_order);//simpan ke tabel temp_order_det dari order_det
-		
 		$data['action_form'] = base_url('penjualan_order/saveorder_edit');
 		$data['page'] = 'penjualan/v_edit_penjualan_order';
 		$this->load->view('template/index',$data);

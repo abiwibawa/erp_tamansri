@@ -6,16 +6,16 @@
             $.validationEngineLanguage.allRules = {
                 "required": { // Add your regex rules here, you can take telephone as an example
                     "regex": "none",
-                    "alertText": "* This field is required",
-                    "alertTextCheckboxMultiple": "* Please select an option",
-                    "alertTextCheckboxe": "* This checkbox is required",
-                    "alertTextDateRange": "* Both date range fields are required"
+                    "alertText": "* Haurs Disi",
+                    "alertTextCheckboxMultiple": "* Mohon Pilih Salah Satu",
+                    "alertTextCheckboxe": "* Checkbox Harus Diisi",
+                    "alertTextDateRange": "* Rentang Tanggal Harus Diisi"
                 },
                 "requiredInFunction": { 
                     "func": function(field, rules, i, options){
                         return (field.val() == "test") ? true : false;
                     },
-                    "alertText": "* Field must equal test"
+                    "alertText": "* Harus sama dengan test"
                 },
                 "dateRange": {
                     "regex": "none",
@@ -92,7 +92,7 @@
                 "number": {
                     // Number, including positive, negative, and floating decimal. credit: orefalo
                     "regex": /^[\-\+]?((([0-9]{1,3})([,][0-9]{3})*)|([0-9]+))?([\.]([0-9]+))?$/,
-                    "alertText": "* Invalid floating decimal number"
+                    "alertText": "* Format Angka"
                 },
                 "date": {                    
                     //	Check if date is valid by leap year
