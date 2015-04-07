@@ -97,6 +97,7 @@
 							<li>
 								<a href="#">Stock<i class="icon-angle-right pull-right"></i></a>
 								<ul class="dropdown-submenu">
+									<li><a href="<?=base_url('pembelian_penerimaan_barang_stock')?>" >Stock</i></a>
 									<li><a href="<?=base_url('stock_bahanbaku')?>">Bahan Baku</a></li>
 									<li><a href="<?=base_url('stock_bahanpenolong')?>">Bahan Penolong</a></li>
 									<li><a href="<?=base_url('stock_bahanteknik')?>">Bahan Teknik/Spare Part</a></li>

@@ -1,47 +1,6 @@
 <script>
 $(document).ready(function(){
-	$("#filter").change(function(){
-		var filter = $("#filter").val();
-		//alert(filter);
-		if(filter=="no_surat_pemesanan"){
-			$("#surat_pemesanan").show();
-			$("#surat_jalan").hide();
-			$("#tanggal").hide();
-			$("#kode_suplier").hide();
-			$("#nama_suplier").hide();
-		}else if(filter=="no_surat_jalan"){
-			$("#surat_pemesanan").hide();
-			$("#surat_jalan").show();
-			$("#tanggal").hide();
-			$("#kode_suplier").hide();
-			$("#nama_suplier").hide();
-		}else if(filter=="tgl_masuk"){
-			$("#surat_pemesanan").hide();
-			$("#surat_jalan").hide();
-			$("#tanggal").show();
-			$("#kode_suplier").hide();
-			$("#nama_suplier").hide();
-		}else if(filter=="kode_suplier"){
-			$("#surat_pemesanan").hide();
-			$("#surat_jalan").hide();
-			$("#tanggal").hide();
-			$("#kode_suplier").show();
-			$("#nama_suplier").hide();
-		}else if(filter=="nama_suplier"){
-			$("#surat_pemesanan").hide();
-			$("#surat_jalan").hide();
-			$("#tanggal").hide();
-			$("#kode_suplier").hide();
-			$("#nama_suplier").show();
-		}else{
-			$("#surat_pemesanan").hide();
-			$("#surat_jalan").hide();
-			$("#tanggal").hide();
-			$("#kode_suplier").hide();
-			$("#nama_suplier").hide();
-		}
-	})
-
+	$('#myTable').DataTable({"iDisplayLength": 10, "aLengthMenu": [5,10,25,50], "sPaginationType": "full_numbers",});
 	$(".detil_penerimaan").click(function(){
 		var id_order = $(this).attr("data-id");
 		var vurl = $(this).attr("data-url");
@@ -61,9 +20,22 @@ $(document).ready(function(){
 			}
 		});
 	});
+
 	$(".TampilSemua").click(function(){
-				location.reload();
-			});
+		location.reload();
+	});
+
+	$("#filter").change(function(){
+		var filter = $("#filter").val();
+		//alert(filter);
+		if(filter == "a.tanggal"){
+			$(".tanggal").show();
+			$(".biasa").hide();
+		}else{
+			$(".tanggal").hide();
+			$(".biasa").show();
+		}
+	});
 })
 
 function popup_carisuplier(){
@@ -111,13 +83,19 @@ function popup_carisuplier(){
 			?>
 			<div class="content controls">
 				<div class="form-row">
-					<div class="col-md-1">Filter</div>
+					<div class="col-md-1">Filter </div>
 					<div class="col-md-3">
-						<?=form_dropdown('filter',$isi_cmb,$this->form_data->cmb,'class="form-control id="filter" ')?>
+						<?=form_dropdown('filter',$isi_cmb,$this->form_data->cmb,'class="form-control" id="filter" ')?>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-3 biasa" <?php if($this->form_data->cmb != "a.tanggal") echo 'style=""'; else echo 'style="display: none"' ?>>
 						<?=form_input('value',$this->form_data->value,'class="form-control validate[required]" id="" ')?>
 					</div>
+					<div class="col-md-3 tanggal" <?php if($this->form_data->cmb == "a.tanggal") echo 'style=""'; else echo 'style="display: none"' ?>>
+						<div class="input-group">
+	                        <div class="input-group-addon"><span class="icon-calendar-empty"></span></div>
+	                        <input type="text" class="datepicker form-control" name="tanggal" value="<?=$this->form_data->value?>" />
+	                    </div>
+	                </div>
 					<div class="col-md-2">
 						<button type="submit" class="btn_tambah btn btn-block btn-success">proses</button>
 					</div>
@@ -149,7 +127,7 @@ function popup_carisuplier(){
 				<h2>Detail Pemesanan Barang</h2>
 			</div>
 			<div class="content">
-				<table cellpadding="0" cellspacing="0" width="100%" class="table table-bordered table-striped table-hover">
+				<table id="myTable" cellpadding="0" cellspacing="0" width="100%" class="table table-bordered table-striped table-hover">
 				<thead>
 					<tr>
 						<th width="1%">No</th>
@@ -172,7 +150,7 @@ function popup_carisuplier(){
 						<td width="10%" align="center">
 						<a href="#modal_default_3" data-toggle="modal" class="detil_penerimaan btn btn-info tip icon-search" title="Detail" data-id="<?=$row->id_penerimaan_h?>" data-url="<?=base_url('pembelian_lappenerimaan_barang/detail_modal')?>" data-wd="700px" data-title="Detail Penerimaan NO Surat Jalan <?=$row->no_surat_jalan?>">&nbsp;Detail</a>
 						<?=anchor(base_url("pembelian_lappenerimaan_barang/edit/".$row->id_penerimaan_h),'&nbsp;Edit','data-toggle="modal" class="btn btn-warning tip icon-pencil" title="Edit"');?>
-						<?=anchor(base_url("pembelian_lappenerimaan_barang/cetak/".$row->id_penerimaan_h),'&nbsp;Cetak','data-toggle="modal" target="_blank" class="btn btn-danger tip icon-trash" title="Hapus"');?>
+						<?=anchor(base_url("pembelian_lappenerimaan_barang/cetak/".$row->id_penerimaan_h),'&nbsp;Cetak','data-toggle="modal" target="_blank" class="btn btn-danger tip icon-trash" title="Cetak"');?>
 						</td>                              
 					</tr>
 				<?php

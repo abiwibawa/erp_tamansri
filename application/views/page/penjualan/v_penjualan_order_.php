@@ -132,9 +132,9 @@
 				</div>
 				<div class="form-row">
 					<div class="col-md-1">Qty:</div>
-					<div class="col-md-4"><?=form_input('kuantitas','','class="validate[required,custom[number]] form-control" id="kuantitas" ')?></div>
+					<div class="col-md-4"><?=form_input('kuantitas','','class="validate[required,custom[integer]] form-control" id="kuantitas" ')?></div>
 					<div class="col-md-1">Harga:</div>
-					<div class="col-md-4"><?=form_input('harga','','class="validate[required,custom[number]] form-control" id="harga" ')?></div>
+					<div class="col-md-4"><?=form_input('harga','','class="validate[required,custom[integer]] form-control" id="harga" ')?></div>
 				</div>
 				<div class="form-row">
 					<div class="col-md-2">Keterangan:</div>

@@ -117,7 +117,7 @@
 		}
 		
 		public function ConverMataUang($a){
-			return number_format($a,2,",",".");
+			return number_format($a,0,",",".");
 		}		
 	}
 ?>

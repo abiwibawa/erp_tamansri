@@ -30,8 +30,10 @@ $("#btn_cari_barang").click(function(){
 
 	$(".tambah_penerimaan").click(function(){
 		var vurl = "<?=base_url('pembelian_penerimaan_barang/simpan')?>";
+		/*var vurl = "<?=base_url('pembelian_penerimaan_barang/cek')?>";*/
 		var id_pemesanan_h = $("input[name=id_pemesanan_h]").val();
 		var no_surat_jalan = $("input[name=surat_jalan]").val();
+		var tanggal = $("input[name=tanggal]").val();
 		var nopol = $("input[name=nopol_kendaraan]").val();
 		var jam = $("input[name=jam]").val();
 		var id_pemesanan_d = $("input[name=id_pemesanan_d]").val();
@@ -40,7 +42,7 @@ $("#btn_cari_barang").click(function(){
 		var qty_barang = $("input[name=qty_barang]").val();
 		var keterangan = $("input[name=keterangan]").val();
 		//alert(nopol);
-		var parsing = {id_pemesanan_h:id_pemesanan_h, no_surat_jalan:no_surat_jalan, nopol:nopol, jam:jam, id_pemesanan_d:id_pemesanan_d, id_barang:id_barang, kuantitas_barang:kuantias_barang, qty_barang:qty_barang, keterangan:keterangan};
+		var parsing = {tanggal:tanggal, id_pemesanan_h:id_pemesanan_h, no_surat_jalan:no_surat_jalan, nopol:nopol, jam:jam, id_pemesanan_d:id_pemesanan_d, id_barang:id_barang, kuantitas_barang:kuantias_barang, qty_barang:qty_barang, keterangan:keterangan};
 		$.ajax({
 			type: "POST",
 			dataType: "json",
@@ -50,7 +52,8 @@ $("#btn_cari_barang").click(function(){
 				//alert(response.dokumen);
 				$("#tabel .block .content").html(response.vtabel);
 				//$("#tabel .block .header").html(response.dokumen);
-				noty({text: '<b>Data Berhasil di tambahkan.</b>', type: 'success',timeout:2000});
+				/*noty({text: '<b>Data Berhasil di tambahkan.</b>', type: 'success',timeout:2000});*/
+				noty({text: response.pesan, type: 'success',timeout:2000});
 				$("input[name=kuantitas_barang]").val("");
 				$("input[name=kd_barang]").val("");
 				$("input[name=nama_barang]").val("");
@@ -180,6 +183,15 @@ $atts = array(
 			</div>
 			<div class="content controls">
 				<div class="form-row">
+					<div class="col-md-4">Tanggal</div>
+					<div class="col-md-4">
+						<div class="input-group">
+							<div class="input-group-addon"><span class="icon-calendar-empty"></span></div>
+							<?=form_input('tanggal',$this->form_data->tanggal,'class="form-control datepicker"')?>
+						</div>
+					</div>
+				</div>
+				<div class="form-row">
 					<div class="col-md-4">Surat Jalan</div>
 					<div class="col-md-6">
 							<?=form_input('surat_jalan',$this->form_data->surat_jalan,'class="form-control " ')?>
@@ -245,7 +257,6 @@ $atts = array(
 			</div>
 		</div>
 	</div>
-</form>
 	<div class="col-md-12" id="tabel">
 		<div class="block block-fill-white">
 			<div class="header">

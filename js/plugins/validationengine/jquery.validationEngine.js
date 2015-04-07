@@ -290,6 +290,18 @@
 				var result = form.attr('result');
 				if(result=="po"){
 					form_order(form);
+				}else{
+					var vurl = $(form).attr("action");
+					var data2 = $(form).serialize();
+					$.ajax({
+						type: "POST",
+						dataType: "json",
+						url : vurl,
+						data: data2,
+						success: function(response){
+							window.location.replace(response);
+						}
+					});
 				}
 				return false;
 			}else{

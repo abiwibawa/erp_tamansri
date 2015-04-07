@@ -18,6 +18,7 @@ Class pembelian_penerimaan_barang extends CI_Controller{
 		$this->form_data->telp_suplier = '';
 		$this->form_data->surat_jalan = '';
 		$this->form_data->nopol_kendaraan = '';
+		$this->form_data->tanggal = '';
 		$this->form_data->jam = '12:12';
 		$data['data'] = $this->m_pembelian_penerimaan_barang->getAll(0,0);
 		$data['page']='pembelian/v_pembelian_penerimaan_barang';
@@ -33,28 +34,50 @@ Class pembelian_penerimaan_barang extends CI_Controller{
 		//echo $data['td'];
 		$this->load->view('popup/popup',$data);
 	}
+
+	function cek(){
+		$angka = $this->input->post('qty_barang')+1;
+		$this->form_validation->set_rules('kuantitas_barang','kuantitas barang','trim|required|xss_clean|is_natural_no_zero|less_than['.$angka.']');
+		$this->form_validation->set_rules('keterangan','keterangan','trim|required|xss_clean');
+		//$date = new now('Y-m-d');
+		
+		if($this->form_validation->run() == TRUE){
+			$data['pesan'] = "Berhasil ".$angka;
+		}else{
+			$data['pesan'] = "tidak Berhasil ".$angka;
+		}
+		echo json_encode($data);
+	}
 	
 	function simpan(){
+		$angka = $this->input->post('qty_barang')+1;
 		$this->form_validation->set_rules('no_surat_jalan','surat jalan','trim|required|xss_clean');
+		$this->form_validation->set_rules('tanggal', 'Tanggal', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('nopol','Nopol Kendaraan','trim|required|xss_clean');
 		$this->form_validation->set_rules('jam','Jam','trim|required|xss_clean');
-		$this->form_validation->set_rules('kuantitas_barang','kuantitas barang','trim|required|xss_clean');
+		$this->form_validation->set_rules('kuantitas_barang','kuantitas barang','trim|required|xss_clean|is_natural_no_zero|less_than['.$angka.']');
 		$this->form_validation->set_rules('keterangan','keterangan','trim|required|xss_clean');
 		//$date = new now('Y-m-d');
 		
 		if($this->form_validation->run() == TRUE){
 			$value = array(
 					'id_pemesanan_h'=>$this->input->post('id_pemesanan_h'),
-					'tanggal'=> Date("Y-m-d"),
+					'tanggal'=> date('Y-m-d',strtotime($this->input->post('tanggal'))),
 					'no_surat_jalan'=> $this->input->post('no_surat_jalan'),
 					'no_pol'=> $this->input->post('nopol'),
-					'jam'=> $this->input->post('jam'),
+					'jam'=> $this->input->post('jam')
 					);
 			$cek = $this->db->get_where('pembelian_penerimaan_h', $value)->num_rows();
 			//$cek = $this->m_pembelian_penerimaan_barang->cek_tabel_penerimaan($value);
 			//$hasil['dokumen'] = $cek;
 			if ($cek != 1) {
 				$simpan_penerimaan_h = $this->simpan->SimpanMaster('pembelian_penerimaan_h',$value);
+				$tgl = date('Y-m-d',strtotime($this->input->post('tanggal')));
+				$id_customer = "";
+				$this->db->select_max('id_penerimaan_h');
+				$query = $this->db->get('pembelian_penerimaan_h')->row();
+				$id_trx = $query->id_penerimaan_h;
+				$simpan_no_surat = $this->createnosurat->nosurat2($id_trx,$id_customer,"SPN",$tgl);
 			}
 
 			$this->db->select_max('id_penerimaan_h');
@@ -69,9 +92,14 @@ Class pembelian_penerimaan_barang extends CI_Controller{
 					'keterangan' => $this->input->post('keterangan'),
 					);
 			$simpan_penerimaan_d = $this->simpan->SimpanMaster('pembelian_penerimaan_d',$value2);
+			$hasil = $this->m_pembelian_penerimaan_barang->getAll($this->input->post('id_pemesanan_h'), $query->id_penerimaan_h);
+			$hasil['pesan'] = "Data berhasil di simpan";
+			$hasil['type'] = "success";
+		}else{
+			$hasil['pesan'] = "Cek kembali data yang anda masukkan";
+			$hasil['type'] = "error";
 		}
 		//$hasil = $this->m_pembelian_penerimaan_barang->getAll(1);
-		$hasil = $this->m_pembelian_penerimaan_barang->getAll($this->input->post('id_pemesanan_h'), $query->id_penerimaan_h);
 		//$hasil['dokumen'] = $tes;
 		$hasil['js'] = 
 		"<script>$(document).ready(function(){

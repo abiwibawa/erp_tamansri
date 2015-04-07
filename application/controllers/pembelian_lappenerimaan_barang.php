@@ -12,6 +12,7 @@ Class pembelian_lappenerimaan_barang extends CI_Controller{
 		$where = '';
 		$this->form_data->value = "";
 		$this->form_data->cmb = "";
+		$data['cek_form'] = "";
 		$data['list'] = $this->m_pembelian_penerimaan_barang->getLapPenerimaan($where);
 		$data['page'] = 'pembelian/v_pembelian_lappenerimaan_barang';
 		$this->load->view('template/index',$data);
@@ -22,14 +23,20 @@ Class pembelian_lappenerimaan_barang extends CI_Controller{
 		$value = $this->input->post('value');
 		if($filter=="" || $value==""){
 			$where = "";
+			$this->form_data->value = "";
+		}else if ($filter == "a.tanggal" || $value=="") {
+			# code...
+			$tanggal = date('Y-m-d',strtotime($this->input->post('tanggal')));
+			$where = "where $filter = '$tanggal'";
+			$this->form_data->value = date('d/m/Y',strtotime($tanggal));
 		}else{
 			$where = "where $filter = '$value'";
+			$this->form_data->value = $value;
 		}
-		$this->form_data->value = $value;
 		$this->form_data->cmb = $filter;
 		$data['list'] = $this->m_pembelian_penerimaan_barang->getLapPenerimaan($where);
 		$data['page'] = 'pembelian/v_pembelian_lappenerimaan_barang';
-		//echo $value;
+		//echo $data['cek_form'];
 		$this->load->view('template/index',$data);
 	}
 	
@@ -51,6 +58,7 @@ Class pembelian_lappenerimaan_barang extends CI_Controller{
 			$this->form_data->nama_suplier = $row->nama;
 			$this->form_data->alamat_suplier = $row->alamat;
 			$this->form_data->telp_suplier = $row->telpon;
+			$this->form_data->tanggal = $row->tanggal;
 			$this->form_data->surat_jalan = $row->no_surat_jalan;
 			$this->form_data->nopol_kendaraan = $row->no_pol;
 			$this->form_data->jam = $row->jam;

@@ -12,7 +12,8 @@ Class m_pembelian_penerimaan_barang extends CI_Model{
 					pener_h.no_pol,
 					pener_h.jam,
 					pener_h.id_pemesanan_h,
-					barang.nama_barang
+					barang.nama_barang,
+					barang.id_barang
 				FROM
 					pembelian_penerimaan_d AS pener_d ,
 					pembelian_penerimaan_h AS pener_h ,

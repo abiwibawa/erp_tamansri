@@ -12,7 +12,7 @@ Class Update extends CI_Model{
 	function update2($tabel,$data,$where){
 		$this->db->where($where);
 		$this->db->update($tabel, $data);
-	}	
+	}
 	
 	function Master($data,$tabel,$where){
 		$this->db->where($where);

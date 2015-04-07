@@ -50,13 +50,24 @@ class penjualan_laporder_m extends CI_Model{
 					mastercustomer.nama,
 					mastercustomer.kode_customer,
 					masterbarang.nama_barang,
-					masterbarang.kode_barang
+					masterbarang.kode_barang,
+					total.total
 				FROM
 				(SELECT * FROM `order` $where $where_tgl)`order` LEFT JOIN
 				(SELECT * FROM order_det $where)order_det ON
 				`order`.id_order=order_det.id_order LEFT JOIN
 				masterbarang ON order_det.id_barang=masterbarang.id_barang LEFT JOIN
-				(select * from mastercustomer $where_customer)mastercustomer ON `order`.id_customer=mastercustomer.id_customer";
+				(select * from mastercustomer $where_customer)mastercustomer ON `order`.id_customer=mastercustomer.id_customer
+				LEFT JOIN (
+						SELECT
+							id_order,
+							SUM((kuantitas * harga)) AS total
+						FROM
+							order_det
+						GROUP BY
+							id_order
+					)total ON total.id_order=`order`.id_order";
+		//echo $q."<br><br><br><br>";
 		$query = $this->db->query($q);
 		$hasil = array();
 		$a=0;
@@ -69,11 +80,13 @@ class penjualan_laporder_m extends CI_Model{
 				$hasil[$a]['kode_customer'] = $row->kode_customer." / ".$row->nama;
 				$hasil[$a]['nama'] = $row->nama;
 				$hasil[$a]['id_order'] = $row->id_order;
+				$hasil[$a]['id_order_det'] = $row->id_order_det;
 				$hasil[$a]['status_sj'] = "";
 				$hasil[$a]['kode_brg'] = "";
 				$hasil[$a]['kuantitas'] = "";
 				$hasil[$a]['harga'] = "";
 				$hasil[$a]['keterangan'] = "";
+				$hasil[$a]['total'] = "Rp. ".$this->periode->ConverMataUang($row->total);
 				$a++;
 			}
 			
@@ -83,11 +96,13 @@ class penjualan_laporder_m extends CI_Model{
 			$hasil[$a]['kode_customer'] = "";
 			$hasil[$a]['nama'] = "";
 			$hasil[$a]['id_order'] = $row->id_order;
+			$hasil[$a]['id_order_det'] = $row->id_order_det;
 			$hasil[$a]['status_sj'] = $row->status_sj;
 			$hasil[$a]['kode_brg'] = $row->kode_barang."/".$row->nama_barang;
 			$hasil[$a]['kuantitas'] = $row->kuantitas;
-			$hasil[$a]['harga'] = "&#64; ".$row->harga;
+			$hasil[$a]['harga'] = "&#64; ".$this->periode->ConverMataUang($row->harga);
 			$hasil[$a]['keterangan'] = $row->keterangan;
+			$hasil[$a]['total'] = "&nbsp";
 			
 			$noid=$row->id_order;
 			$page++;

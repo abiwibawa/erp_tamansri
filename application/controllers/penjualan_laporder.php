@@ -114,7 +114,16 @@ Class penjualan_laporder extends CI_Controller{
 		$hasil['redir'] = base_url('penjualan_order_/vedit');
 		echo json_encode($hasil);
 	}
-	
+	function vedit_detail(){
+		$id = $this->input->post('id_order');
+		$exp = explode(".",$id);
+		$sess_edit = array('id_order_edit_sess'=>$exp[0],
+									'id_order_det_edit_sess'=>$exp[1]
+							);
+		$this->session->set_userdata($sess_edit);
+		$hasil['redir'] = base_url('penjualan_order_/vedit_detail');
+		echo json_encode($hasil);
+	}
 	function config_page($url,$total_row){
 		$config['base_url']=$url;
 		$config['total_rows']=$total_row;

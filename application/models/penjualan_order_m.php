@@ -29,7 +29,35 @@ class penjualan_order_m extends CI_Model{
 		
 		return array('subtotal'=>$total,'vtabel'=>$tabel);
 	}
-	
+	function get_detail($id_order,$id_order_det){
+		$q = "SELECT
+					od.id_order_det,
+					od.id_order,
+					mb.kode_barang,
+					mb.nama_barang,
+					od.kuantitas,
+					od.harga,
+					od.satuan,
+					(od.kuantitas * od.harga) AS total,
+					od.keterangan
+				FROM
+					(
+						SELECT * FROM order_det WHERE id_order='$id_order' AND id_order_det='$id_order_det'
+					) od
+				LEFT JOIN masterbarang mb ON od.id_barang=mb.id_barang";
+		$query = $this->db->query($q);
+		return $query->result();		
+	}
+	function ceksuratjalan($id_order,$id_order_det){
+		//$q = "SELECT * FROM ordersuratjalan WHERE id_order='$id_order'";
+		$this->db->where('id_order',$id_order);
+		$this->db->from('ordersuratjalan');
+		$row=$this->db->count_all_results();
+		if($row>0)
+			return 1;
+		else
+			return 0;
+	}
 	function getsubtotal_edit_temp($idorder){
 		$total =0;
 		$no =1;
@@ -84,7 +112,7 @@ class penjualan_order_m extends CI_Model{
 	}
 	
 	function get_header($id_order){
-		$query = $this->db->query("SELECT
+		$query_bak = $this->db->query("SELECT
 													a.id_order,
 													a.no_dokumen,
 													a.tanggal,
@@ -103,6 +131,44 @@ class penjualan_order_m extends CI_Model{
 													`order` a
 												LEFT JOIN mastercustomer b ON a.id_customer = b.id_customer
 												where a.id_order = '$id_order'");
+			$q = "SELECT
+						po.id_order,
+						po.no_dokumen,
+						po.tanggal,
+						po.total_harga,
+						po.subtotal,
+						po.biaya_pengiriman,
+						po.keterangan,
+						po.syarat_bayar,
+						po.id_customer,
+						det.total,
+						mastercustomer.kode_customer,
+						mastercustomer.nama,
+						mastercustomer.alamat,
+						mastercustomer.kota,
+						mastercustomer.telpon
+					FROM
+						(
+							SELECT
+								*
+							FROM
+								`order`
+							WHERE
+								id_order = '$id_order'
+						) po
+					LEFT JOIN (
+						SELECT
+							id_order,
+							SUM((kuantitas * harga)) AS total
+						FROM
+							order_det
+						WHERE
+							id_order = '$id_order'
+						GROUP BY
+							id_order
+					) det ON po.id_order=det.id_order
+					LEFT JOIN mastercustomer ON po.id_customer=mastercustomer.id_customer";
+			$query = $this->db->query($q);
 			return $query->result();
 	}
 	

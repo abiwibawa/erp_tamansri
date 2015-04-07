@@ -155,7 +155,7 @@
 			}
 
 		.footer {
-			
+			padding-top: 50px;
 		}
 
 			.footer > table {
@@ -180,7 +180,7 @@
 			}
 
 			.catatankiribawah {
-				width: 400px;
+				width: 700px;
 				font-size: 0.8rem;
 				margin: 10px;
 				margin-top: 150px;
@@ -190,10 +190,10 @@
 					border-bottom: 1px solid #111;
 					display: inline-block;
 				}
-
+<!--
 			.tandatangan {
 				position: absolute;
-				right: 30px;
+				float: left;
 				bottom: 10px;
 				text-align: center;
 				height: 120px;
@@ -204,9 +204,8 @@
 				}
 
 				.tandatangan .kurung {
-					position: absolute;
+					margin-top: absolute;
 					bottom: 0;
-					margin: auto;
 					left: 0;
 					right: 0;
 				}
@@ -231,7 +230,40 @@
 					margin: auto;
 					left: 0;
 					right: 0;
+				} -->
+				
+				.ttd1{
+					float: left;
+					width: 250px;
+					text-align: center;
+					margin-top: 20px;
+					
+					
 				}
+				.ttd1 .kurung p{
+					margin-top: 80px;
+				}
+				
+				.ttd2{
+					float: left;
+					width: 250px;
+					text-align: center;
+					margin-top: 20px;
+				}
+				.ttd2 .kurung p{
+					margin-top: 80px;
+				}
+								
+				.ttd3{
+					float: left;
+					width: 250px;
+					text-align: center;
+					margin-top: 20px;
+				}
+				.ttd3 .kurung p{
+					margin-top: 80px;
+				}
+				
 	</style>
 </head>
 <body>
@@ -303,58 +335,35 @@
 				</tr>
 			</table>
 		</section>
+			<div class="ttd1" >
+				<p>Diperiksa Oleh,</p>
+				<h4>Taufan Budiman</h4>
+				<div class="kurung">
+					<p>( Taufan Budiman )</p>
+				</div>
+			</div>
+			<div class="ttd2">
+				<p>&nbsp;</p>
+				<h4>&nbsp;</h4>
+				<div class="kurung">
+					<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					)</p>
+				</div>
+			</div>
+			<div class="ttd3" >
+				<p>Diterima Oleh,</p>
+				<h4>Taufan Budiman</h4>
+				<div class="kurung">
+					<p>( Taufan Budiman )</p>
+				</div>
+			</div>
 		<section class="footer">
-			<table style="width: auto">
-			<th>
-				<p>Deterima,</p>
-				<h4>jtafkajskld</h4>
-				<div class="kurung">
-					<span>(</span>
-					<p>asdf</p>
-					<span>)</span>
-				</div>
-			</th>
-			<th>
-				<p>Deterima,</p>
-				<h4>jtafkajskld</h4>
-				<div class="kurung">
-					<span>(</span>
-					<p>asdf</p>
-					<span>)</span>
-				</div>
-			</th>
-			<th>
-				<p>Deterima,</p>
-				<h4>jtafkajskld</h4>
-				<div class="kurung">
-					<span>(</span>
-					<p>asdf</p>
-					<span>)</span>
-				</div>
-			</th>
-			<th>
-				<p>Deterima,</p>
-				<h4>jtafkajskld</h4>
-				<div class="kurung">
-					<span>(</span>
-					<p>asdf</p>
-					<span>)</span>
-				</div>
-			</th>
-		</table>
 			<div class="catatankiribawah">
 				<p>Catatan :</p>
 				<p>Laporan penerimaan barang ini, harus dilampiri dengan copy surat jalan dari supplier</p>
-			</div>
-			<div class="tandatangan">
-				<p>Deterima,</p>
-				<h4>jtafkajskld</h4>
-				<div class="kurung">
-					<span>(</span>
-					<p>asdf</p>
-					<span>)</span>
-				</div>
-
 			</div>
 		</section>
 	</div>
